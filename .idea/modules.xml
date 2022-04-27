@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/FinalLab.iml" filepath="$PROJECT_DIR$/.idea/FinalLab.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/connect_four_mini_max_nn.iml" filepath="$PROJECT_DIR$/.idea/connect_four_mini_max_nn.iml" />
     </modules>
   </component>
 </project>
