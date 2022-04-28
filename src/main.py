@@ -8,7 +8,7 @@ def text_game_loop():
     board.print_board()
     pcount= 0
 
-    inp = int(input("\nDrop a piece (1-7): "))
+    inp = int(input("\nPlayer " + str(pcount%2) + ", Drop a piece (1-7): "))
     while(inp != 0):
         if(board.is_open(inp)):
             board.place_piece(int(inp), pcount%2)
@@ -18,7 +18,7 @@ def text_game_loop():
             pcount += 1
         else:
             print("no space to drop")
-        inp = int(input("\nDrop a piece (1-7): "))
+        inp = int(input("\nPlayer " + str(pcount%2) + ", Drop a piece (1-7): "))
 
 
 
