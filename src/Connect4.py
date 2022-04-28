@@ -4,24 +4,30 @@ from copy import deepcopy
 class Connect4():
 
     def __init__(self):
-        self._board = np.full((6, 7), -1)
+        # player 1 is 0
+        # player 2 is 1
+        # -1 is empty space
+        self.width = 7
+        self.height = 6
+        self.board = np.full((self.height, self.width), -1)
+        self.check_winner(1)
 
     def is_open(self, pos):
         pos = pos-1
-        return self._board[0][pos] == -1
+        return self.board[0][pos] == -1
 
     def place_piece(self, pos, player):
         pos = pos-1
-        for row in range(5, -1, -1):
-            if self._board[row][pos] == -1:
-                self._board[row][pos] = player
+        for row in range(self.height-1, -1, -1):    #starts at the bottom, goes to the top
+            if self.board[row][pos] == -1:
+                self.board[row][pos] = player
                 return row
         return -1
 
     def evaluate(self, player):
         total = 0
         total += self.eval_columns(player)
-        total -= self.eval_columns((player+1)%2)    #may need to remove this for minimax
+        #total -= self.eval_columns((player+1)%2)    #may need to add/remove this for minimax
         #total += self.eval_rows(board, player)
         #total += self.eval_diagonals(board, player)
         return total
@@ -30,23 +36,20 @@ class Connect4():
         total = 0
         for y in range(7):      #no need to check above x,y piece, only below
             for x in range(3):
-                col = [self._board[i][y] for i in range(x, x+4 if x < 3 else 6)]    #[-1, 0, 1, 1]
+                col = [self.board[i][y] for i in range(x, x + 4 if x < 3 else self.height)]    #ex of col: [-1, 0, 1, 1]
+                print(col)
                 if (player+1)%2 not in col: #if opposite player is in the column, don't consider
-                    col = list(map(lambda a: 0 if a == player + 1 % 2 or a == -1 else 1, col))
-                    s = sum(col)  #maps all non player symbols to 0
-                    if s == 4:      #double a 4 in a row, don't add single pieces
+                    col = list(map(lambda a: 0 if a == player + 1 % 2 or a == -1 else 1, col)) #maps all non player symbols to 0
+                    s = sum(col)
+                    if s == 4:      #double a 4 in a row, don't add singles (ex: [0, 0, 0, 1])
                         total += 8
                     elif s >= 2:
                         total += s
         return total
 
-
-
-
-
     def get_next_moves(self, board, player):
         next = []
-        for i in range(7):
+        for i in range(self.width):
             board2 = deepcopy(board)
             move = board2.place_piece(i+1, player)
             if move != -1:
@@ -64,4 +67,10 @@ class Connect4():
 
     def print_board(self):
         print()
-        print(np.vectorize(self.print_map)(self._board))
+        print(np.vectorize(self.print_map)(self.board))
+
+    def check_winner(self, player):
+        for idx, pos in np.ndenumerate(self.board):
+            print(f'Index: {idx}, value: {pos}')
+                
+        return False
