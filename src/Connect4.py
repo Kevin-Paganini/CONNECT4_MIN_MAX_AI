@@ -1,5 +1,9 @@
 import numpy as np
 from copy import deepcopy
+from scipy.signal import convolve2d
+
+
+
 
 class Connect4():
 
@@ -83,8 +87,31 @@ class Connect4():
         print()
         print(np.vectorize(self.print_map)(self.board))
 
-    def check_winner(self, player):
-        for idx, pos in np.ndenumerate(self.board):
-            print(f'Index: {idx}, value: {pos}')
-                
+
+    def is_there_a_winner(self):
+        if self.check_winner(0):
+            return True
+        if self.check_winner(1):
+            return True
+
         return False
+
+    def check_winner(self, player):
+        # win_check_board = np.full((self.height, self.width), 0)
+        # for row in self.board:
+        #     for col in self.board:
+        #         if (player == self.board[row][col]):
+        #             win_check_board[row][col] = 1
+        
+        # print(win_check_board)
+        horizontal_kernel = np.array([[ 1, 1, 1, 1]])
+        vertical_kernel = np.transpose(horizontal_kernel)
+        diag1_kernel = np.eye(4, dtype=np.uint8)
+        diag2_kernel = np.fliplr(diag1_kernel)
+        detection_kernels = [horizontal_kernel, vertical_kernel, diag1_kernel, diag2_kernel]
+        for kernel in detection_kernels:
+            if (convolve2d(self.board == player, kernel, mode="valid") == 4).any():
+                return True
+        return False
+                
+        
