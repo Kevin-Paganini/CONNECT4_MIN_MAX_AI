@@ -1,13 +1,13 @@
 import numpy as np
 from copy import deepcopy
 from scipy.signal import convolve2d
-
+from board import Board
 
 
 
 class Connect4():
 
-    def __init__(self):
+    def __init__(self, win):
         # player 1 is 0
         # player 2 is 1
         # -1 is empty space
@@ -15,6 +15,9 @@ class Connect4():
         self.height = 6
         self.board = np.full((self.height, self.width), -1)
         self.check_winner(1)
+        self.win = win
+        self.turn = 0
+        self.board = Board(win, self.width, self.height)
 
     def is_open(self, pos):
         pos = pos-1
@@ -25,6 +28,10 @@ class Connect4():
         for row in range(self.height-1, -1, -1):    #starts at the bottom, goes to the top
             if self.board[row][pos] == -1:
                 self.board[row][pos] = player
+                if self.turn == 0:
+                    self.turn = 1
+                else:
+                    self.turn = 0
                 return row
         return -1
 
