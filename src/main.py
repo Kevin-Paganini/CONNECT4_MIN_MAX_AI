@@ -4,7 +4,11 @@ def main():
     text_game_loop()
 
 def text_game_loop():
-    board = Connect4()
+    w = int(input("Enter board width (4+): "))
+    h = int(input("Enter board height (4+): "))
+    n = int(input("Enter number of pieces in a row to win (3+): "))
+
+    board = Connect4(w,h,n)
     board.print_board()
     pcount= 0
 
