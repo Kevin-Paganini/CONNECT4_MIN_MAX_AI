@@ -12,11 +12,14 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 60
 pygame.display.set_caption("Connect Four++")
 
-valid_inputs = ['1', '2', '3', '4', '5', '6', '7']
+valid_inputs = [1,2,3,4,5,6,7]
 
 def main():
-    #text_game_loop()
-    pyGameLoop()
+    inp = input("Text(t) or pygame(p)?: ")
+    if inp == "t":
+        text_game_loop()
+    else:
+        pyGameLoop()
 
 def text_game_loop():
     board = Connect4()
@@ -24,21 +27,27 @@ def text_game_loop():
     pcount= 0
 
     inp = int(input("\nPlayer " + str(pcount%2) + ", Drop a piece (1-7): "))
-    Flag = True
-    while(not board.is_there_a_winner()):
-        if(board.is_open(inp)):
-            board.place_piece(int(inp), pcount%2)
+    while not board.is_there_a_winner():
+        if board.is_open(inp):
+            board.place_piece(inp, pcount%2)
             board.print_board()
-            print("Value for player " + str(pcount%2 + 1) + ": " + str(board.evaluate(pcount%2)))
-            
-            print("Value for player " + str((pcount+1) % 2 + 1) + ": " + str(board.evaluate((pcount+1) % 2)))
-            
+
+            p1, t1 = board.evaluate(0)
+            p2, t2 = board.evaluate(1)
+            p1k, t1k = board.evaluate_k(0)
+            p2k, t2k = board.evaluate_k(1)
+
+            print("V p1: " + str(p1) + " | V_K p1: " + str(p1k))
+            print("V p2: " + str(p2) + " | V_K p2: " + str(p2k))
+            print("Custom: [" + format(t1, ".2f") + "ms, " + format(t2, ".2f") + "ms]")
+            print("Kernel: [" + format(t1k, ".2f") + "ms, " + format(t2k, ".2f") + "ms]")
             pcount += 1
         else:
             print("no space to drop")
         if not board.is_there_a_winner():
-            while(input("\nPlayer " + str(pcount%2) + ", Drop a piece (1-7): ") not in valid_inputs):
-                input("\nPlayer " + str(pcount%2) + ", Drop a piece (1-7): ")
+            inp = int(input("\nPlayer " + str(pcount % 2) + ", Drop a piece (1-7): "))
+            while inp not in valid_inputs:
+                inp = int(input("\nPlayer " + str(pcount%2) + ", Drop a piece (1-7): "))
             
 
 def get_row_col_from_mouse(pos):
