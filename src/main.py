@@ -1,10 +1,12 @@
 from Connect4 import Connect4
 import pygame
+import random
+import time
 
 
 WIDTH = 1050
 HEIGHT = 800
-SQUARE_SIZE = WIDTH / 7
+SQUARE_SIZE = 133
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 60
@@ -41,36 +43,99 @@ def text_game_loop():
 
 def get_row_col_from_mouse(pos):
     x, y = pos
-    row = y // SQUARE_SIZE
-    col = (x + 50) // SQUARE_SIZE
+    col = (x - 66) // SQUARE_SIZE
     return col
 
+def choose_game():
+    return input("Press 1 for two player game, press 2 for player/random game.")
 
 
 def pyGameLoop():
-    run = True
+    choice = int(choose_game())
     game = Connect4(WIN)
     clock = pygame.time.Clock()
+    pygame.display.update()
+    if choice == 1:
+        two_player_loop(game, clock)
+    elif choice == 2:
+        player_random_loop(game, clock)
     
 
-    pygame.display.update()
+def two_player_loop(game, clock):
+    run = True
+
     while run:
         clock.tick(FPS)
-
+        pygame.display.update()
+        if game.is_there_a_winner() == True:
+            run = False
         if game.turn == 0:
-            pass
+            
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False #
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False #
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                col  = get_row_col_from_mouse(pos)
-                print(col)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
+                    col  = get_row_col_from_mouse(pos)
+                    if(game.is_open(col)):
+                        game.place_piece(int(col) + 1, 0)
+                        print(col)
+                    else:
+                        print("no space to drop")
+        
+        elif game.turn == 1:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False #
 
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
+                    col  = get_row_col_from_mouse(pos)
+                    if(game.is_open(col)):
+                        game.place_piece(int(col) + 1, 1)
 
+                        print(col)
 
+                    else:
+                        print("no space to drop")
+
+def player_random_loop(game, clock):
+    run = True
+
+    while run:
+        clock.tick(FPS)
+        pygame.display.update()
+        if game.is_there_a_winner() == True:
+            run = False
+        if game.turn == 0:
+            
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False #
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
+                    col  = get_row_col_from_mouse(pos)
+                    if(game.is_open(col)):
+                        game.place_piece(int(col) + 1, 0)
+                        print(col)
+                    else:
+                        print("no space to drop")
+        
+        elif game.turn == 1:
+            time.sleep(1)
+            col = random.randint(0, 6)
+            while(not game.is_open(col)):
+                col = random.randint(0, 6)
+
+            game.place_piece(int(col) + 1, 1)
+
+            print(col)
+
+            
 
 
 if __name__ == '__main__':

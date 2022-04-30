@@ -17,7 +17,7 @@ class Connect4():
         self.check_winner(1)
         self.win = win
         self.turn = 0
-        self.board = Board(win, self.width, self.height)
+        self.board_py_game = Board(win, self.width, self.height)
 
     def is_open(self, pos):
         pos = pos-1
@@ -28,6 +28,7 @@ class Connect4():
         for row in range(self.height-1, -1, -1):    #starts at the bottom, goes to the top
             if self.board[row][pos] == -1:
                 self.board[row][pos] = player
+                self.board_py_game.place_piece(row + 1, pos + 1, self.turn)
                 if self.turn == 0:
                     self.turn = 1
                 else:
