@@ -17,15 +17,9 @@ class Connect4():
         self.board = np.full((self.height, self.width), -1)
         #self.board = np.arange(42).reshape(self.height, self.width) #FIXME for debugging evals
         self.check_winner(1)
-<<<<<<< HEAD
         self.win = win
         self.turn = 0
         self.board_py_game = Board(win, self.width, self.height)
-=======
-        if win is not None:
-            self.win = win
-            self.board = Board(win, self.width, self.height)    #FIXME is the Board class gonna mimic the np array?
->>>>>>> 9471634fae614353afdf4ff016161129ed5a82e8
 
     def is_open(self, pos):
         pos = pos-1
@@ -36,14 +30,11 @@ class Connect4():
         for row in range(self.height-1, -1, -1):    #starts at the bottom, goes to the top
             if self.board[row][pos] == -1:
                 self.board[row][pos] = player
-<<<<<<< HEAD
                 self.board_py_game.place_piece(row + 1, pos + 1, self.turn)
                 if self.turn == 0:
                     self.turn = 1
                 else:
                     self.turn = 0
-=======
->>>>>>> 9471634fae614353afdf4ff016161129ed5a82e8
                 return row
         return -1
 
