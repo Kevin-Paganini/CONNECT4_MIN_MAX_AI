@@ -169,7 +169,9 @@ class Connect4():
         diag2_kernel = np.fliplr(diag1_kernel)
         detection_kernels = [horizontal_kernel, vertical_kernel, diag1_kernel, diag2_kernel]
         for kernel in detection_kernels:
+           
             if (convolve2d(self.board == player, kernel, mode="valid") == 4).any():
+                
                 return True
         return False
                 
