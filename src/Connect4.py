@@ -4,6 +4,8 @@ from scipy.signal import convolve2d
 from board import Board
 import time
 
+from NullBoard import NullBoard
+
 
 class Connect4():
 
@@ -17,9 +19,7 @@ class Connect4():
         self.board = np.full((self.height, self.width), -1)
         #self.board = np.arange(42).reshape(self.height, self.width) #FIXME for debugging evals
         self.check_winner(1)
-        self.win = win
-        self.turn = 0
-        self.board_py_game = Board(win, self.width, self.height)
+        self.board_py_game = Board(win, self.width, self.height) if win is not None else NullBoard() #sets to none if text is run
 
     def is_open(self, pos):
         pos = pos-1
@@ -30,11 +30,7 @@ class Connect4():
         for row in range(self.height-1, -1, -1):    #starts at the bottom, goes to the top
             if self.board[row][pos] == -1:
                 self.board[row][pos] = player
-                self.board_py_game.place_piece(row + 1, pos + 1, self.turn)
-                if self.turn == 0:
-                    self.turn = 1
-                else:
-                    self.turn = 0
+                self.board_py_game.place_piece(row + 1, pos + 1, player)
                 return row
         return -1
 
@@ -42,20 +38,24 @@ class Connect4():
         total = 0
         start = time.time()
         total += self.eval_columns(player)
-        #total -= self.eval_columns((player+1)%2)    #may need to add/remove this for minimax
         total += self.eval_rows(player)
         total += self.eval_left_diag(player)
         total += self.eval_right_diag(player)
+
+        # total -= self.eval_columns((player+1)%2)      #may need to add/remove this for minimax
+        # total -= self.eval_rows((player+1)%2)         #may need to add/remove this for minimax
+        # total -= self.eval_left_diag((player+1)%2)    #may need to add/remove this for minimax
+        # total -= self.eval_right_diag((player+1)%2)   #may need to add/remove this for minimax
         end = time.time()
         return total, (end-start)*1000
 
     def eval_columns(self, player):
         total = 0
-        for x in range(self.width):      #no need to check above x,y piece, only below
+        for x in range(self.width):
             for y in range(self.height-(self.in_a_row-1)):
-                col = [self.board[i][x] for i in range(y, y + self.in_a_row if y < self.in_a_row-1 else self.height)]    #ex of col: [-1, 0, 1, 1]
-                if (player+1)%2 not in col: #if opposite player is in the column, don't consider
-                    col = list(map(lambda a: 0 if a == -1 else 1, col)) #maps empty to 0
+                col = [self.board[y+i][x] for i in range(self.in_a_row)]
+                if (player+1)%2 not in col:
+                    col = list(map(lambda a: 0 if a == -1 else 1, col))
                     total += self.get_sum(col)
         return total
 
@@ -93,8 +93,8 @@ class Connect4():
         total = 0
         start = time.time()
 
-        board2 = deepcopy(self.board)
-        for i in range(self.height):
+        board2 = deepcopy(self.board)               #this currently only works for the current player
+        for i in range(self.height):                #still doesnt act as intended for .AAA. occurences
             for j in range(self.width):
                 board2[i][j] = 0 if board2[i][j] != player else 1
 
@@ -163,7 +163,7 @@ class Connect4():
         
         # print(win_check_board)
 
-        horizontal_kernel = np.array([[ 1, 1, 1, 1]])
+        horizontal_kernel = np.array([[1, 1, 1, 1]])
         vertical_kernel = np.transpose(horizontal_kernel)
         diag1_kernel = np.eye(4, dtype=np.uint8)
         diag2_kernel = np.fliplr(diag1_kernel)
