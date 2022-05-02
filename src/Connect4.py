@@ -35,6 +35,7 @@ class Connect4():
         return -1
 
     def evaluate(self, player):
+        #print("\nEvals for player " + str(player) + ":")
         total = 0
         start = time.time()
         total += self.eval_columns(player)
@@ -42,12 +43,13 @@ class Connect4():
         total += self.eval_left_diag(player)
         total += self.eval_right_diag(player)
 
-        # total -= self.eval_columns((player+1)%2)      #may need to add/remove this for minimax
-        # total -= self.eval_rows((player+1)%2)         #may need to add/remove this for minimax
-        # total -= self.eval_left_diag((player+1)%2)    #may need to add/remove this for minimax
-        # total -= self.eval_right_diag((player+1)%2)   #may need to add/remove this for minimax
+        total -= self.eval_columns((player+1)%2)      #may need to add/remove this for minimax
+        total -= self.eval_rows((player+1)%2)         #may need to add/remove this for minimax
+        total -= self.eval_left_diag((player+1)%2)    #may need to add/remove this for minimax
+        total -= self.eval_right_diag((player+1)%2)   #may need to add/remove this for minimax
         end = time.time()
-        return total, (end-start)*1000
+
+        return total
 
     def eval_columns(self, player):
         total = 0
@@ -113,25 +115,23 @@ class Connect4():
             if (grad == 4).any():
                 total += 8
         end = time.time()
-        return total, (end-start)*1000
+        return total
 
     def get_sum(self, group):
         s = sum(group)
         if s == self.in_a_row:  # double a 4 in a row, don't add singles (ex: [0, 0, 0, 1])
-            return s+s
+            #print("Group being added: " + str(group))
+            return 1000
         elif s >= 2:
-            return s
+            #print("Group being added: " + str(group))
+            return s**3
         else:
             return 0
 
-    def get_next_moves(self, board, player):
-        next = []
-        for i in range(self.width):
-            board2 = deepcopy(board)
-            move = board2.place_piece(i+1, player)
-            if move != -1:
-                next.append(board2)
-        return next
+    def get_next_move(self, board, move, player):
+        board2 = deepcopy(board)
+        board2.place_piece(move, player)
+        return board2
 
 
     def print_map(self, x):
