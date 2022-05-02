@@ -32,11 +32,19 @@ class Board:
             
             
 
-    def place_piece(self, row, pos, player):
+    def place_piece(self, pos, player):
+        pos = pos-1
+        ret = 0
+        for row in range(self.height-1, -1, -1):    #starts at the bottom, goes to the top
+            if self.board[row][pos] == -1:
+                ret = row
+                break
+                
+        
         square_width = (width) / self.cols
         square_height = (height) / self.rows
         if player == 0:
-            pygame.draw.circle(self.win, PLAYER_0_COLOR, (pos * square_width, row * square_height), (square_width / 2 - 15))
+            pygame.draw.circle(self.win, PLAYER_0_COLOR, (pos * square_width, ret * square_height), (square_width / 2 - 15))
         else:
-            pygame.draw.circle(self.win, PLAYER_1_COLOR, (pos * square_width, row * square_height), (square_width / 2 - 15))
+            pygame.draw.circle(self.win, PLAYER_1_COLOR, (pos * square_width, ret * square_height), (square_width / 2 - 15))
 

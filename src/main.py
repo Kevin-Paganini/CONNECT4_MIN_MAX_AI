@@ -53,8 +53,8 @@ def text_game_loop2():
             get_player_move(player, board)
                 
         elif players[player] == "r":
-            get_random_move(player, board)
-            
+            col = get_random_move(player, board)
+            board.place_piece(col, player)
             
         elif players[player] == "m":
             val, pos = minimax.get_move(board, 4, player)
@@ -107,7 +107,8 @@ def get_random_move(player, board):
     while(not board.is_open(col)):
         col = random.randint(1, 7)
 
-    board.place_piece(int(col), player)
+    return int(col)
+    
     
 def get_player_move(player, board):
     inp = int(input("\nPlayer " + str(player % 2) + ", Drop a piece (1-7): "))
@@ -127,12 +128,14 @@ def pyGameLoop():
     WIN = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Connect Four++")
     game = Connect4(WIN)
+    py_board = Board(WIN, 6, 7)
     clock = pygame.time.Clock()
     pygame.display.update()
-    run_pygame_loop(game, clock)
+
+    run_pygame_loop(game, clock, py_board)
     
 
-def run_pygame_loop(game, clock):
+def run_pygame_loop(game, clock, py_board):
     run = True
     player = 0
 
@@ -152,6 +155,7 @@ def run_pygame_loop(game, clock):
                     col = get_row_col_from_mouse(pos)
                     if game.is_open(col):
                         game.place_piece(col, player)
+                        py_board.place_piece(col, player)
                         player = (player + 1) % 2
                         print(col)
                     else:
@@ -159,72 +163,19 @@ def run_pygame_loop(game, clock):
         elif players[player] == "m":
             val, pos = minimax.get_move(game, 4, player)
             game.place_piece(pos, player)
+            py_board.place_piece(pos, player)
+            player = (player + 1) % 2
 
         elif players[player] == "r":
-            get_random_move(player, game)
+            col = get_random_move(player, game)
+            game.place_piece(col, player)
+            py_board.place_piece(col, player)
             player = (player + 1) % 2
 
         
 
 
 
-def two_player_loop(game, clock):
-    run = True
-    player = 0
-
-    while run:
-        clock.tick(FPS)
-        pygame.display.update()
-        if game.is_there_a_winner():
-            run = False
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False  #
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                pos = pygame.mouse.get_pos()
-                col = get_row_col_from_mouse(pos)
-                if game.is_open(col):
-                    game.place_piece(col, player)
-                    player = (player + 1) % 2
-                    print(col)
-                else:
-                    print("no space to drop")
-
-def player_random_loop(game, clock):
-    run = True
-    player = 0
-
-    while run:
-        clock.tick(FPS)
-        pygame.display.update()
-        if game.is_there_a_winner() == True:
-            run = False
-        if player == 0:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    run = False #
-
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = pygame.mouse.get_pos()
-                    col = get_row_col_from_mouse(pos)
-                    if game.is_open(col):
-                        game.place_piece(col, 0)
-                        player = (player + 1) % 2
-                        print(col)
-                    else:
-                        print("no space to drop")
-        
-        elif player == 1:
-            time.sleep(1)
-            col = random.randint(1, 7)
-            while(not game.is_open(col)):
-                col = random.randint(0, 6)
-
-            game.place_piece(int(col) + 1, 1)
-            player = (player + 1) % 2
-            print(col)
-            
 
 
 if __name__ == '__main__':
