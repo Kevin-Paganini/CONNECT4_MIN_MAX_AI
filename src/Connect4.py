@@ -35,6 +35,7 @@ class Connect4():
         return -1
 
     def evaluate(self, player):
+        print("\nEvals for player " + str(player) + ":")
         total = 0
         start = time.time()
         total += self.eval_columns(player)
@@ -118,8 +119,10 @@ class Connect4():
     def get_sum(self, group):
         s = sum(group)
         if s == self.in_a_row:  # double a 4 in a row, don't add singles (ex: [0, 0, 0, 1])
+            print("Group being added: " + str(group))
             return s+s
         elif s >= 2:
+            print("Group being added: " + str(group))
             return s
         else:
             return 0
