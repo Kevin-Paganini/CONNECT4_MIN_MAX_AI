@@ -51,7 +51,7 @@ def text_game_loop():
 def get_row_col_from_mouse(pos):
     x, y = pos
     col = (x - 66) // SQUARE_SIZE
-    return col
+    return col+1
 
 def choose_game():
     return input("Press 1 for two player game, press 2 for player/random game.")
@@ -87,7 +87,7 @@ def two_player_loop(game, clock):
                 pos = pygame.mouse.get_pos()
                 col = get_row_col_from_mouse(pos)
                 if game.is_open(col):
-                    game.place_piece(int(col) + 1, player)
+                    game.place_piece(col, player)
                     player = (player + 1) % 2
                     print(col)
                 else:
@@ -111,7 +111,7 @@ def player_random_loop(game, clock):
                     pos = pygame.mouse.get_pos()
                     col = get_row_col_from_mouse(pos)
                     if game.is_open(col):
-                        game.place_piece(int(col) + 1, 0)
+                        game.place_piece(col, 0)
                         player = (player + 1) % 2
                         print(col)
                     else:
@@ -119,7 +119,7 @@ def player_random_loop(game, clock):
         
         elif player == 1:
             time.sleep(1)
-            col = random.randint(0, 6)
+            col = random.randint(1, 7)
             while(not game.is_open(col)):
                 col = random.randint(0, 6)
 
