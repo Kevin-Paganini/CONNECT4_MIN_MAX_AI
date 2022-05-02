@@ -4,6 +4,7 @@ import random
 import time
 
 from board import Board
+from src import minimax
 
 WIDTH = 1050
 HEIGHT = 800
@@ -13,11 +14,13 @@ FPS = 60
 valid_inputs = [1, 2, 3, 4, 5, 6, 7]
 
 def main():
-    inp = input("Text(t) or pygame(p)?: ")
+    inp = input("Text(t), Minimax(m), pygame(p)?: ")
     if inp == "t":
         text_game_loop()
-    else:
+    elif inp == 'p':
         pyGameLoop()
+    else:
+        minimax_loop()
 
 def text_game_loop():
     board = Connect4()
@@ -46,7 +49,36 @@ def text_game_loop():
             inp = int(input("\nPlayer " + str(pcount % 2) + ", Drop a piece (1-7): "))
             while inp not in valid_inputs:
                 inp = int(input("\nPlayer " + str(pcount%2) + ", Drop a piece (1-7): "))
-            
+
+def minimax_loop():
+    board = Connect4()
+    board.print_board()
+    player = 0
+    while not board.is_there_a_winner():
+        if player == 0:
+            inp = int(input("\nPlayer 0, Drop a piece (1-7): "))
+            if board.is_open(inp):
+                board.place_piece(inp, 0)
+                player = (player+1)%2
+            else:
+                print("no space to drop")
+        else:
+            value, pos = minimax.get_move(board, 3, 1)
+            board.place_piece(pos, 1)
+            player = (player + 1) % 2
+            board.print_board()
+
+            p1 = board.evaluate(0)
+            p2 = board.evaluate(1)
+            p1k = board.evaluate_k(0)
+            p2k = board.evaluate_k(1)
+
+            print("V p1: " + str(p1) + " | V_K p1: " + str(p1k))
+            print("V p2: " + str(p2) + " | V_K p2: " + str(p2k))
+            #print("Custom: [" + format(t1, ".2f") + "ms, " + format(t2, ".2f") + "ms]")
+            #print("Kernel: [" + format(t1k, ".2f") + "ms, " + format(t2k, ".2f") + "ms]")
+
+
 
 def get_row_col_from_mouse(pos):
     x, y = pos
