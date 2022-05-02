@@ -19,7 +19,6 @@ class Connect4():
         self.board = np.full((self.height, self.width), -1)
         #self.board = np.arange(42).reshape(self.height, self.width) #FIXME for debugging evals
         self.check_winner(1)
-        self.board_py_game = Board(win, self.width, self.height) if win is not None else NullBoard() #sets to none if text is run
 
     def is_open(self, pos):
         pos = pos-1
@@ -30,7 +29,6 @@ class Connect4():
         for row in range(self.height-1, -1, -1):    #starts at the bottom, goes to the top
             if self.board[row][pos] == -1:
                 self.board[row][pos] = player
-                self.board_py_game.place_piece(row + 1, pos + 1, player)
                 return row
         return -1
 

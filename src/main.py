@@ -154,7 +154,7 @@ def pyGameLoop():
     WIN = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Connect Four++")
     game = Connect4(WIN)
-    py_board = Board(WIN, 6, 7)
+    py_board = Board(WIN, 7, 6)
     clock = pygame.time.Clock()
     pygame.display.update()
 
@@ -180,22 +180,22 @@ def run_pygame_loop(game, clock, py_board):
                     pos = pygame.mouse.get_pos()
                     col = get_row_col_from_mouse(pos)
                     if game.is_open(col):
-                        game.place_piece(col, player)
-                        py_board.place_piece(col, player)
+                        row = game.place_piece(col, player)
+                        py_board.place_piece(row, col, player)
                         player = (player + 1) % 2
                         print(col)
                     else:
                         print("no space to drop")
         elif players[player] == "m":
             val, pos = minimax.get_move(game, 4, player)
-            game.place_piece(pos, player)
-            py_board.place_piece(pos, player)
+            row = game.place_piece(pos, player)
+            py_board.place_piece(row, pos, player)
             player = (player + 1) % 2
 
         elif players[player] == "r":
             col = get_random_move(player, game)
-            game.place_piece(col, player)
-            py_board.place_piece(col, player)
+            row = game.place_piece(col, player)
+            py_board.place_piece(row, col, player)
             player = (player + 1) % 2
 
         
