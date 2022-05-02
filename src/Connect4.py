@@ -38,10 +38,14 @@ class Connect4():
         total = 0
         start = time.time()
         total += self.eval_columns(player)
-        #total -= self.eval_columns((player+1)%2)    #may need to add/remove this for minimax
         total += self.eval_rows(player)
         total += self.eval_left_diag(player)
         total += self.eval_right_diag(player)
+
+        # total -= self.eval_columns((player+1)%2)      #may need to add/remove this for minimax
+        # total -= self.eval_rows((player+1)%2)         #may need to add/remove this for minimax
+        # total -= self.eval_left_diag((player+1)%2)    #may need to add/remove this for minimax
+        # total -= self.eval_right_diag((player+1)%2)   #may need to add/remove this for minimax
         end = time.time()
         return total, (end-start)*1000
 
@@ -159,7 +163,7 @@ class Connect4():
         
         # print(win_check_board)
 
-        horizontal_kernel = np.array([[ 1, 1, 1, 1]])
+        horizontal_kernel = np.array([[1, 1, 1, 1]])
         vertical_kernel = np.transpose(horizontal_kernel)
         diag1_kernel = np.eye(4, dtype=np.uint8)
         diag2_kernel = np.fliplr(diag1_kernel)

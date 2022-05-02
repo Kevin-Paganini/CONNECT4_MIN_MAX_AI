@@ -8,10 +8,7 @@ from board import Board
 WIDTH = 1050
 HEIGHT = 800
 SQUARE_SIZE = 133
-
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 60
-pygame.display.set_caption("Connect Four++")
 
 valid_inputs = [1, 2, 3, 4, 5, 6, 7]
 
@@ -62,6 +59,8 @@ def choose_game():
 
 def pyGameLoop():
     choice = int(choose_game())
+    WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Connect Four++")
     game = Connect4(WIN)
     clock = pygame.time.Clock()
     pygame.display.update()
