@@ -168,14 +168,7 @@ def run_pygame_loop(game, clock, py_board):
     while run:
         clock.tick(FPS)
         pygame.display.update()
-        if game.is_there_a_winner():
-            if game.check_winner(0):
-                print(f'Player 0 is the winner... ({players[player]})')
-            else:
-                player = (player + 1) % 2
-                print(f'Player 1 is the winner... ({players[player]})')
-            pygame.quit()
-            run = False
+        
 
         if players[player] == "p":
             
@@ -189,9 +182,11 @@ def run_pygame_loop(game, clock, py_board):
                         row = game.place_piece(col, player)
                         py_board.place_piece(row, col, player)
                         player = (player + 1) % 2
-                        print(col)
+                        
                     else:
                         print("no space to drop")
+
+
         elif players[player] == "m":
             val, pos = minimax.get_move(game, 4, player)
             row = game.place_piece(pos, player)
@@ -204,7 +199,17 @@ def run_pygame_loop(game, clock, py_board):
             py_board.place_piece(row, col, player)
             player = (player + 1) % 2
 
-        
+        if game.is_there_a_winner():
+            pygame.display.update()
+            if game.check_winner(0):
+                winner = f'Player 0 is the winner... ({players[player]})'
+            else:
+                player = (player + 1) % 2
+                winner = f'Player 1 is the winner... ({players[player]})'
+            py_board.display_win(winner)
+            
+            pygame.quit()
+            run = False
 
 
 

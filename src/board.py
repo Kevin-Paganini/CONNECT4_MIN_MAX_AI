@@ -1,4 +1,5 @@
 import numpy
+import pyautogui
 import pygame
 import os
 
@@ -41,3 +42,5 @@ class Board:
         else:
             pygame.draw.circle(self.win, PLAYER_1_COLOR, (pos * square_width, (row+1) * square_height), (square_width / 2 - 15))
 
+    def display_win(self, player):
+        pyautogui.confirm(player)
