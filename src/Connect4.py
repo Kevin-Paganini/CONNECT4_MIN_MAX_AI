@@ -41,6 +41,7 @@ class Connect4():
         total += self.eval_left_diag(player)
         total += self.eval_right_diag(player)
 
+        #a decent idea might be to multiply any 4 in a rows for the opposite player
         total -= self.eval_columns((player+1)%2)      #may need to add/remove this for minimax
         total -= self.eval_rows((player+1)%2)         #may need to add/remove this for minimax
         total -= self.eval_left_diag((player+1)%2)    #may need to add/remove this for minimax

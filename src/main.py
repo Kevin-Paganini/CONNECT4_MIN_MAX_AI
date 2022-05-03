@@ -2,10 +2,9 @@ from Connect4 import Connect4
 import pygame
 import random
 import time
-import minimax
 
 from board import Board
-from src import minimax
+import minimax
 
 WIDTH = 1050
 HEIGHT = 800
