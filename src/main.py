@@ -168,6 +168,12 @@ def run_pygame_loop(game, clock, py_board):
         clock.tick(FPS)
         pygame.display.update()
         if game.is_there_a_winner():
+            if game.check_winner(0):
+                print(f'Player 0 is the winner... ({players[player]})')
+            else:
+                player = (player + 1) % 2
+                print(f'Player 1 is the winner... ({players[player]})')
+            pygame.quit()
             run = False
 
         if players[player] == "p":
