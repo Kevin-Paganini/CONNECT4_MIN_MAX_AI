@@ -56,10 +56,14 @@ def text_game_loop2():
             board.place_piece(col, player)
             
         elif players[player] == "m":
-            val, pos = minimax.get_move(board, 6, player)
+            val, pos = minimax.get_move(board, 5, player)
             board.place_piece(pos, player)
         
         player = (player + 1) % 2
+        board.print_board()
+        p1 = board.evaluate(0)
+        p2 = board.evaluate(1)
+        print("V p1: " + str(p1) + "\nV p2: " + str(p2))
 
 
 def text_game_loop():

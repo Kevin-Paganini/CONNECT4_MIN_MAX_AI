@@ -119,7 +119,7 @@ class Connect4():
         s = sum(group)
         if s == self.in_a_row:  # double a 4 in a row, don't add singles (ex: [0, 0, 0, 1])
             #print("Group being added: " + str(group))
-            return 1000
+            return 10000000000000
         elif s >= 2:
             #print("Group being added: " + str(group))
             return s**3
