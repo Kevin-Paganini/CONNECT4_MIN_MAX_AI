@@ -62,20 +62,8 @@ class Connect4():
         end = time.time()
         return total
 
-<<<<<<< HEAD
-    def get_sum(self, group):
-        s = sum(group)
-        if s == self.in_a_row:  # double a 4 in a row, don't add singles (ex: [0, 0, 0, 1])
-            #print("Group being added: " + str(group))
-            return 10000000000000
-        elif s >= 2:
-            #print("Group being added: " + str(group))
-            return s**3
-        else:
-            return 0
+    
 
-=======
->>>>>>> 953f17fa86d0cba36d6afcc5d439c4a9c9a78294
     def get_next_move(self, board, move, player):
         board2 = deepcopy(board)
         board2.place_piece(move, player)

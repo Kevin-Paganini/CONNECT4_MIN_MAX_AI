@@ -55,89 +55,14 @@ def text_game_loop2():
             board.place_piece(col, player)
             
         elif players[player] == "m":
-<<<<<<< HEAD
-            val, pos = minimax.get_move(board, 5, player)
-=======
             val, pos = minimax.get_move(board, 5, player, heur1)
->>>>>>> 953f17fa86d0cba36d6afcc5d439c4a9c9a78294
             board.place_piece(pos, player)
         
         player = (player + 1) % 2
         board.print_board()
-<<<<<<< HEAD
-        p1 = board.evaluate(0)
-        p2 = board.evaluate(1)
-        print("V p1: " + str(p1) + "\nV p2: " + str(p2))
-
-
-def text_game_loop():
-    board = Connect4()
-    board.print_board()
-    player = 0
-
-    inp = int(input("\nPlayer " + str(player%2) + ", Drop a piece (1-7): "))
-    while not board.is_there_a_winner():
-        if board.is_open(inp):
-            board.place_piece(inp, player%2)
-            board.print_board()
-            board.is_there_a_winner()
-            p1, t1 = board.evaluate(0)
-            p2, t2 = board.evaluate(1)
-            p1k, t1k = board.evaluate_k(0)
-            p2k, t2k = board.evaluate_k(1)
-
-            print("V p1: " + str(p1) + " | V_K p1: " + str(p1k))
-            print("V p2: " + str(p2) + " | V_K p2: " + str(p2k))
-            print("Custom: [" + format(t1, ".2f") + "ms, " + format(t2, ".2f") + "ms]")
-            print("Kernel: [" + format(t1k, ".2f") + "ms, " + format(t2k, ".2f") + "ms]")
-            player = (player + 1) % 2
-        else:
-            print("no space to drop")
-        if not board.is_there_a_winner():
-            if players[player] == "p":
-                get_player_move(player, board)
-                
-            elif players[player] == "r":
-                get_random_move(player, board)
-
-            elif players[player] == "m":
-                val, pos = minimax.get_move(board, 6, player)
-                board.place_piece(pos, player)
-            
-            player = (player + 1) % 2
-
-def minimax_loop():
-    board = Connect4()
-    board.print_board()
-    player = 0
-    while not board.is_there_a_winner():
-        if player == 0:
-            inp = int(input("\nPlayer 0, Drop a piece (1-7): "))
-            if board.is_open(inp):
-                board.place_piece(inp, 0)
-                player = (player+1)%2
-            else:
-                print("no space to drop")
-        else:
-            value, pos = minimax.get_move(board, 6, 1)
-            board.place_piece(pos, 1)
-            player = (player + 1) % 2
-            board.print_board()
-
-            p1 = board.evaluate(0)
-            p2 = board.evaluate(1)
-            p1k = board.evaluate_k(0)
-            p2k = board.evaluate_k(1)
-
-            print("V p1: " + str(p1) + " | V_K p1: " + str(p1k))
-            print("V p2: " + str(p2) + " | V_K p2: " + str(p2k))
-            #print("Custom: [" + format(t1, ".2f") + "ms, " + format(t2, ".2f") + "ms]")
-            #print("Kernel: [" + format(t1k, ".2f") + "ms, " + format(t2k, ".2f") + "ms]")
-=======
         p1 = board.evaluate(0, heur1)
         p2 = board.evaluate(1, heur1)
         print("V p1: " + str(p1) + "\nV p2: " + str(p2))
->>>>>>> 953f17fa86d0cba36d6afcc5d439c4a9c9a78294
 
 
 def get_random_move(player, board):
