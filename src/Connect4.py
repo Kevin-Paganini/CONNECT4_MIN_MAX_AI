@@ -9,16 +9,16 @@ from NullBoard import NullBoard
 
 class Connect4():
 
-    def __init__(self, win=None):
+    def __init__(self, width, height, in_a_row):
         # player 1 is 0
         # player 2 is 1
         # -1 is empty space
-        self.width = 7
-        self.height = 6
-        self.in_a_row = 4
+        self.width = width
+        self.height = height
+        self.in_a_row = in_a_row
         self.board = np.full((self.height, self.width), -1)
         #self.board = np.arange(42).reshape(self.height, self.width) #FIXME for debugging evals
-        self.check_winner(1)
+        #self.check_winner(1)
 
     def is_open(self, pos):
         pos = pos-1
@@ -32,62 +32,8 @@ class Connect4():
                 return row
         return -1
 
-    def evaluate(self, player):
-        #print("\nEvals for player " + str(player) + ":")
-        total = 0
-        start = time.time()
-        total += self.eval_columns(player)
-        total += self.eval_rows(player)
-        total += self.eval_left_diag(player)
-        total += self.eval_right_diag(player)
-
-        #a decent idea might be to multiply any 4 in a rows for the opposite player
-        total -= self.eval_columns((player+1)%2)      #may need to add/remove this for minimax
-        total -= self.eval_rows((player+1)%2)         #may need to add/remove this for minimax
-        total -= self.eval_left_diag((player+1)%2)    #may need to add/remove this for minimax
-        total -= self.eval_right_diag((player+1)%2)   #may need to add/remove this for minimax
-        end = time.time()
-
-        return total
-
-    def eval_columns(self, player):
-        total = 0
-        for x in range(self.width):
-            for y in range(self.height-(self.in_a_row-1)):
-                col = [self.board[y+i][x] for i in range(self.in_a_row)]
-                if (player+1)%2 not in col:
-                    col = list(map(lambda a: 0 if a == -1 else 1, col))
-                    total += self.get_sum(col)
-        return total
-
-    def eval_rows(self, player):
-        total = 0
-        for y in range(self.height):
-            for x in range(self.width-(self.in_a_row-1)):
-                row = self.board[y][x:x+self.in_a_row]
-                if (player+1)%2 not in row:
-                    row = list(map(lambda a: 0 if a == -1 else 1, row))
-                    total += self.get_sum(row)
-        return total
-
-    def eval_left_diag(self, player):   #left diag = \
-        total = 0
-        for y in range(self.height-(self.in_a_row-1)):
-            for x in range(self.width-(self.in_a_row-1)):
-                ldiag = [self.board[y+i][x+i] for i in range(self.in_a_row)]
-                if (player+1)%2 not in ldiag:
-                    ldiag = list(map(lambda a: 0 if a == -1 else 1, ldiag))
-                    total += self.get_sum(ldiag)
-        return total
-
-    def eval_right_diag(self, player):   #right diag = /
-        total = 0
-        for y in range(self.height-(self.in_a_row-1)):
-            for x in range(self.in_a_row-1, self.width):
-                rdiag = [self.board[y+i][x-i] for i in range(self.in_a_row)]
-                if (player+1)%2 not in rdiag:
-                    rdiag = list(map(lambda a: 0 if a == -1 else 1, rdiag))
-                    total += self.get_sum(rdiag)
+    def evaluate(self, player, heuristic):
+        total = heuristic.evaluate(self.board, player)
         return total
 
     def evaluate_k(self, player):
@@ -115,17 +61,6 @@ class Connect4():
                 total += 8
         end = time.time()
         return total
-
-    def get_sum(self, group):
-        s = sum(group)
-        if s == self.in_a_row:  # double a 4 in a row, don't add singles (ex: [0, 0, 0, 1])
-            #print("Group being added: " + str(group))
-            return 1000
-        elif s >= 2:
-            #print("Group being added: " + str(group))
-            return s**3
-        else:
-            return 0
 
     def get_next_move(self, board, move, player):
         board2 = deepcopy(board)
