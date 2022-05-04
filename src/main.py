@@ -175,6 +175,7 @@ def run_pygame_loop(game, clock, py_board):
                 print(f'Player 1 is the winner... ({players[player]})')
             pygame.quit()
             run = False
+            break
 
         if players[player] == "p":
             
@@ -192,9 +193,15 @@ def run_pygame_loop(game, clock, py_board):
                     else:
                         print("no space to drop")
         elif players[player] == "m":
+            print("Minimax " + str(player) + " is choosing")
             val, pos = minimax.get_move(game, 4, player)
+            print("Minimax " + str(player) + " has chosen " + str(pos))
             row = game.place_piece(pos, player)
+            print("Minimax " + str(player) + " has placed the piece in the number board")
+            time.sleep(0.5)
             py_board.place_piece(row, pos, player)
+            time.sleep(0.5)
+            print("Minimax " + str(player) + " has placed the piece on the pyboard")
             player = (player + 1) % 2
 
         elif players[player] == "r":
