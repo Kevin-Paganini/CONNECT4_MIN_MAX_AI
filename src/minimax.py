@@ -7,7 +7,7 @@ def get_move(board, limit, player, heur):
 
 def max_value(board, d, player, limit, alpha, beta, heur):
     if d == limit or board.is_there_a_winner():
-        return [board.evaluate(player, heur), None]
+        return [board.evaluate(player, heur)/d, None]
 
     v = -9223372036854775800
     act = None
@@ -27,7 +27,7 @@ def max_value(board, d, player, limit, alpha, beta, heur):
 
 def min_value(board, d, player, limit, alpha, beta, heur):
     if d == limit or board.is_there_a_winner():
-        return [board.evaluate(player, heur), None]
+        return [board.evaluate(player, heur)/d, None]
 
     v = 9223372036854775800
     act = None

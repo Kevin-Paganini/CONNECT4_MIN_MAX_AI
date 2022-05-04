@@ -5,7 +5,7 @@ import time
 
 from board import Board
 import minimax
-from src.CountingInARow import CountingInARow
+from CountingInARow import CountingInARow
 
 WIDTH = 1050
 HEIGHT = 800
@@ -88,11 +88,10 @@ def get_row_col_from_mouse(pos):
 
 
 def pyGameLoop():
-    
+    game = Connect4(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
     WIN = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Connect Four++")
-    game = Connect4()
-    py_board = Board(WIN, 7, 6)
+    py_board = Board(WIN, BOARD_WIDTH, BOARD_HEIGHT)
     clock = pygame.time.Clock()
     pygame.display.update()
 
@@ -100,6 +99,7 @@ def pyGameLoop():
     
 
 def run_pygame_loop(game, clock, py_board):
+    heur1 = CountingInARow(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
     run = True
     player = 0
     num_moves = 0
@@ -134,7 +134,7 @@ def run_pygame_loop(game, clock, py_board):
                         print("no space to drop")
 
         elif players[player] == "m":
-            val, pos = minimax.get_move(game, 5, player)
+            val, pos = minimax.get_move(game, 5, player, heur1)
             row = game.place_piece(pos, player)
             if row != -1:
                 py_board.place_piece(row, pos, player)

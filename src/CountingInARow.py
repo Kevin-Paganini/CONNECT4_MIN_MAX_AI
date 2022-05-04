@@ -82,7 +82,7 @@ class CountingInARow:
     def get_sum(self, group):
         s = sum(group)
         if s == self.in_a_row:
-            return 1000
+            return 1000000
         elif s >= 2:
             return s**3
         else:
