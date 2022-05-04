@@ -2,7 +2,7 @@ from Connect4 import Connect4
 import pygame
 import random
 import time
-import minimax
+
 
 from board import Board
 import minimax
@@ -56,7 +56,7 @@ def text_game_loop2():
             board.place_piece(col, player)
             
         elif players[player] == "m":
-            val, pos = minimax.get_move(board, 4, player)
+            val, pos = minimax.get_move(board, 6, player)
             board.place_piece(pos, player)
         
         player = (player + 1) % 2
@@ -93,7 +93,7 @@ def text_game_loop():
                 get_random_move(player, board)
 
             elif players[player] == "m":
-                val, pos = minimax.get_move(board, 4, player)
+                val, pos = minimax.get_move(board, 6, player)
                 board.place_piece(pos, player)
             
             player = (player + 1) % 2
@@ -111,7 +111,7 @@ def minimax_loop():
             else:
                 print("no space to drop")
         else:
-            value, pos = minimax.get_move(board, 3, 1)
+            value, pos = minimax.get_move(board, 6, 1)
             board.place_piece(pos, 1)
             player = (player + 1) % 2
             board.print_board()
@@ -188,7 +188,7 @@ def run_pygame_loop(game, clock, py_board):
 
 
         elif players[player] == "m":
-            val, pos = minimax.get_move(game, 4, player)
+            val, pos = minimax.get_move(game, 6, player)
             row = game.place_piece(pos, player)
             py_board.place_piece(row, pos, player)
             player = (player + 1) % 2
