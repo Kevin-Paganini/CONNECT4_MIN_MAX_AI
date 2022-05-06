@@ -27,16 +27,46 @@ def main():
 
 
 def load_weights():
-    data = csv.reader(open("trained_weights.txt"), delimiter=",")
-    num = 0
-    for y in data:
-        print(num)
-        num += 1
-    print(data)
+    with open('trained_weights.txt', 'r') as tw:
+        for line in tw:
+            w = []
+            weight = []
+            overall_weight = []
+            
+            if line.contains(']],'):
+                line = line.replace(']],', '')
+                line = line.split(' ')
+                line = [float(x) for x in line]
+                weight.append(line)
+                w.append(weight)
+
+                overall_weight.append(w)
+                weight = []
+                w = []
+
+
+            elif line.contains(']'):
+                line = line.replace("[", '')
+                line = line.replace(']', '')
+                line = line.split(" ")
+                line = [float(x) for x in line]
+                weight.append(line)
+                w.append(weight)
+                weight = []
+            else:
+                line = line.replace("[", '')
+                line = line.split(" ")
+                line = [float(x) for x in line]
+                weight.append(line)
+
+        print(w)
+    
+
+  
     
     
     
-    return data
+    return w
 
 def p_loop(clock, py_board, heur1, NN):
     players = ["p", "p"]
