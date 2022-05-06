@@ -15,8 +15,6 @@ def parse_data():
             player = 0
             for i in range(len(moves) - 1):
                 if i % 2 == 0:
-
-                
                     if not connect_4.is_there_a_winner():
                         board = connect_4.board
                         player = (player + 1) % 2
