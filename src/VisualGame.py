@@ -35,38 +35,36 @@ def p_loop(clock, py_board, heur1):
             button = int(listen(py_board))
         elif players[player] == "r":
             button = 9      # random
-        else:
+        elif players[player] == "m":
             button = 10     # minimax
+        else:
+            py_board.display_info("Neural Network not supported yet!")
+            time.sleep(1)
+            players[player] = "r"
+            #button = 30     # neural network
 
-        if 14 < button < 21 and not start:    # set players
+        if 14 < button < 23 and not start:    # set players
             if button == 15:
-                py_board.clear_p1_buttons()
-                py_board.init_side_button("Human", 70, (0, 200, 0), 45)
                 players[0] = "p"
             if button == 16:
-                py_board.clear_p1_buttons()
-                py_board.init_side_button("Minimax", 70, (0, 200, 0), 90)
                 players[0] = "m"
             if button == 17:
-                py_board.clear_p1_buttons()
-                py_board.init_side_button("Random", 70, (0, 200, 0), 135)
                 players[0] = "r"
             if button == 18:
-                py_board.clear_p2_buttons()
-                py_board.init_side_button("Human", 200, (0, 200, 0), 45)
                 players[1] = "p"
             if button == 19:
-                py_board.clear_p2_buttons()
-                py_board.init_side_button("Minimax", 200, (0, 200, 0), 90)
                 players[1] = "m"
             if button == 20:
-                py_board.clear_p2_buttons()
-                py_board.init_side_button("Random", 200, (0, 200, 0), 135)
                 players[1] = "r"
+            if button == 21:
+                players[0] = "n"
+            if button == 22:
+                players[1] = "n"
+            py_board.refresh_side_buttons(players)
+
 
         if button == 12 and not start: #start
-            py_board.init_midline_button("Start", (200, 0, 0), 40)
-            py_board.init_midline_button("Reset", (0, 200, 0), 90)
+            py_board.refresh_midline_buttons([(200, 0, 0), (0, 200, 0)])
             py_board.display_info("It's your turn player 1. Place your piece!")
             start = True
 
@@ -89,6 +87,9 @@ def p_loop(clock, py_board, heur1):
                 val, pos = minimax.get_move(py_board.get_board(), 4, player, heur1)
                 py_board.place_piece(pos, player)
                 player = (player + 1) % 2
+
+            elif button == 30 and not winner: # neural
+                pass
 
             elif button == 13:     # reset board
                 py_board.clear_stuff(players)
