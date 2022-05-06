@@ -23,7 +23,7 @@ def main():
     # Load in weights   
     x = load_weights()
     NN = NeuralNetwork([42, 20, 7], x)
-    p_loop(clock, py_board, heur1)
+    p_loop(clock, py_board, heur1, NN)
 
 
 def load_weights():
@@ -38,7 +38,7 @@ def load_weights():
     
     return data
 
-def p_loop(clock, py_board, heur1):
+def p_loop(clock, py_board, heur1, NN):
     players = ["p", "p"]
     button = 0
     player = 0
@@ -55,10 +55,7 @@ def p_loop(clock, py_board, heur1):
         elif players[player] == "m":
             button = 10     # minimax
         else:
-            py_board.display_info("Neural Network not supported yet!")
-            time.sleep(1)
-            players[player] = "r"
-            #button = 30     # neural network
+            button = 30     # neural network
 
         if 14 < button < 23 and not start:    # set players
             if button == 15:
@@ -107,12 +104,23 @@ def p_loop(clock, py_board, heur1):
 
             elif button == 30 and not winner: # neural
                 # Before game load load in weights
-                # flatten board with numoy
+                # flatten board with numpy
                 # pass in to nn
                 #      Call .step from NNClass
                 # take highest output
                 # take target  
                 # place piece in board
+
+                f_board = py_board.get_board().flatten()
+                out = NN.step(f_board)
+                col = np.argmax(out) + 1
+                if py_board.is_open(col):
+                    py_board.place_piece(col, player)
+                else:
+                    val, pos = minimax.get_move(py_board.get_board(), 4, player, heur1)
+                    py_board.place_piece(pos, player)
+                player = (player + 1) % 2
+
 
                 pass
 

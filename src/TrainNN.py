@@ -4,7 +4,7 @@ import numpy as np
 
 from NeuralNetwork import NNProblem
 
-def test_GA(x, y, verbose = True):
+def test_GA(x, y, verbose = True):  #[[outputs]] or [outputs]
     layers = [42, 20, 7]
 
     pop_size = 100
@@ -101,13 +101,6 @@ def accuracy(x, y, nn):
 def train_connect4_network():
     x, y = load_boards_targets_txt("boards_and_targets.txt")
     test_GA(x[:100], y[:100], True)
-    
-
-
-
-
-
-
 
 def main():
     
