@@ -4,7 +4,7 @@ import numpy as np
 
 from NeuralNetwork import NNProblem
 
-def test_GA(x, y, verbose = True):
+def test_GA(x, y, verbose = True):  #[[outputs]] or [outputs]
     layers = [42, 20, 7]
 
     pop_size = 100
