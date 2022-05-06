@@ -169,7 +169,8 @@ class NNProblem():
 
         for i in range(len(self._input)):
             output = state.step(self._input[i])
-            if abs(self._y[i][0] - output[0][0]) < thres:
+            target = self._y[i][0]
+            if 1 - output[0][target-1] < thres:
                 match += 1
 
         return match/(len(self._y)*len(self._y[0]))
