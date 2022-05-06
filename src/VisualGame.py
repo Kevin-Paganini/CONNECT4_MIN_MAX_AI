@@ -41,27 +41,27 @@ def p_loop(clock, py_board, heur1):
         if 14 < button < 21 and not start:    # set players
             if button == 15:
                 py_board.clear_p1_buttons()
-                py_board.init_left_button("Human", (0, 200, 0), 45)
+                py_board.init_side_button("Human", 70, (0, 200, 0), 45)
                 players[0] = "p"
             if button == 16:
                 py_board.clear_p1_buttons()
-                py_board.init_left_button("Minimax", (0, 200, 0), 90)
+                py_board.init_side_button("Minimax", 70, (0, 200, 0), 90)
                 players[0] = "m"
             if button == 17:
                 py_board.clear_p1_buttons()
-                py_board.init_left_button("Random", (0, 200, 0), 135)
+                py_board.init_side_button("Random", 70, (0, 200, 0), 135)
                 players[0] = "r"
             if button == 18:
                 py_board.clear_p2_buttons()
-                py_board.init_right_button("Human", (0, 200, 0), 45)
+                py_board.init_side_button("Human", 200, (0, 200, 0), 45)
                 players[1] = "p"
             if button == 19:
                 py_board.clear_p2_buttons()
-                py_board.init_right_button("Minimax", (0, 200, 0), 90)
+                py_board.init_side_button("Minimax", 200, (0, 200, 0), 90)
                 players[1] = "m"
             if button == 20:
                 py_board.clear_p2_buttons()
-                py_board.init_right_button("Random", (0, 200, 0), 135)
+                py_board.init_side_button("Random", 200, (0, 200, 0), 135)
                 players[1] = "r"
 
         if button == 12 and not start: #start

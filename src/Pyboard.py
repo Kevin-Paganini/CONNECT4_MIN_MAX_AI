@@ -1,9 +1,5 @@
 import sys
-
-import numpy
-import pyautogui
 import pygame
-import os
 
 WIDTH = 1050
 HEIGHT = 1000
@@ -20,7 +16,14 @@ YELLOW = (200, 200, 0)
 PLAYER_0_COLOR = (51, 162, 29)
 PLAYER_1_COLOR = (200, 34, 27)
 EMPTY = (28, 26, 26)
-poss_players = ["p", "m", "r"]
+
+PLAYER_B_X_BUFF = 70
+PLAYER1_B_Y = 850
+PLAYER2_B_Y = 910
+PLAYER_BUTTON_WIDTH = 90
+P_B_PADDING = 5
+
+poss_players = ["p", "m", "r", "n"]
 p1_color = [GREEN, WHITE, WHITE]
 p2_color = [GREEN, WHITE, WHITE]
 FONT = 'freesansbold.ttf'
@@ -39,8 +42,8 @@ class Pyboard:
         self.buff = 52.5
         self.bottom_of_board = HEIGHT - (HEIGHT - self.square_size*6)-2
         self.players = ["p", "p"]
-        self.p1_color = [GREEN, WHITE, WHITE]
-        self.p2_color = [GREEN, WHITE, WHITE]
+        self.p1_color = [WHITE, WHITE, WHITE]#, WHITE]
+        self.p2_color = [WHITE, WHITE, WHITE]#, WHITE]
 
         self.create_board()
 
@@ -68,6 +71,21 @@ class Pyboard:
         self.init_side_button("Quit", x, WHITE, 140)     #490, 900 | 560, 940
 
         self.refresh_side_buttons(players)
+
+    """
+    def refresh_side_buttons2(self, players):
+        self.p1_color = [WHITE, WHITE, WHITE, WHITE]
+        self.p2_color = [WHITE, WHITE, WHITE, WHITE]
+        idx1 = poss_players.index(players[0])
+        idx2 = poss_players.index(players[1])
+        self.p1_color[idx1] = GREEN
+        self.p2_color[idx2] = GREEN
+
+
+
+    def init_side_button2(self):
+    """
+
 
     def refresh_side_buttons(self, players):
         self.p1_color = [WHITE, WHITE, WHITE]
@@ -99,6 +117,7 @@ class Pyboard:
         text_rect.center = (x, self.bottom_of_board + 25 + buffer)
         color_rect = pygame.Rect((text_rect.left - 10, text_rect.top - 10), (text_rect.width + 20, text_rect.height + 20))
         white_rect = pygame.Rect((text_rect.left - 5, text_rect.top - 5), (text_rect.width + 10, text_rect.height + 10))
+        print(text_rect.width)
         pygame.draw.rect(self.win, color, color_rect)
         pygame.draw.rect(self.win, WHITE, white_rect)
         self.win.blit(text, text_rect)
@@ -116,9 +135,6 @@ class Pyboard:
             self.display_info("It's your turn player " + str((player+1)%2 + 1) + ". Place your piece!")
             return True
         return False
-
-    def display_win(self, player):
-        pyautogui.confirm(player)
 
     def get_row_col_from_mouse(self, mouse):
         col = (mouse[0] - (self.square_size/2) + 15) // self.square_size + 1
