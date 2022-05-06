@@ -61,6 +61,8 @@ class Connect4():
         end = time.time()
         return total
 
+    
+
     def get_next_move(self, board, move, player):
         board2 = deepcopy(board)
         board2.place_piece(move, player)
