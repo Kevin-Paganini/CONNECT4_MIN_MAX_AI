@@ -28,8 +28,11 @@ def main():
 
 def load_weights():
     data = csv.reader(open("trained_weights.txt"), delimiter=",")
-    data = np.array(list(data))
-    
+    num = 0
+    for y in data:
+        print(num)
+        num += 1
+    print(data)
     
     
     

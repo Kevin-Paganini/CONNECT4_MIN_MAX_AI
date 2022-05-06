@@ -55,14 +55,14 @@ def train(problem, initial, epochs = 10, elites = 2, verbose = True):
 def examine_best(problem, best):
     print("Final fitness")
     print(problem.evaluate(best))
-    print("Target vs actual:")
-    for i in range(len(problem._y)):
-        print("\t",problem._y[i], best.step(problem._input[i])[0])
+    
     print("Best weights ")
     with open("trained_weights.txt", "a")as w:
-        w.write('\n')
-        w.write(str(best._W))
+        for x in best._W:
 
+            w.write(str(x))
+            w.write(",")
+        
     for w in best._W:
         print(w)
 
