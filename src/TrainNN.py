@@ -59,6 +59,10 @@ def examine_best(problem, best):
     for i in range(len(problem._y)):
         print("\t",problem._y[i], best.step(problem._input[i])[0])
     print("Best weights ")
+    with open("trained_weights.txt", "a")as w:
+        w.write('\n')
+        w.write(str(best._W))
+
     for w in best._W:
         print(w)
 
@@ -96,16 +100,7 @@ def accuracy(x, y, nn):
 
 def train_connect4_network():
     x, y = load_boards_targets_txt("boards_and_targets.txt")
-    test_GA(x[0:100], y[0:100], True)
-
-    
-    # layers = [9, 4, 1]
-    # problem = NNProblem(x,y,layers)
-    # nn = NeuralNetwork(problem._layer_size,load_4_layer_ttt_network())
-    # a = accuracy(x, y,nn)
-    # print("Testing Tic Tac Toe Network")
-    
-    # print("Accuracy ", a)
+    test_GA(x[:100], y[:100], True)
 
 def main():
     

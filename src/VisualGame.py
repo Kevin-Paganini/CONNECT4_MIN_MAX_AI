@@ -3,10 +3,13 @@ import time
 import random
 import pygame
 import minimax
+import csv
 
+import numpy as np
 from Pyboard import Pyboard
 from Connect4 import Connect4
 from CountingInARow import CountingInARow
+from NeuralNetwork import NeuralNetwork
 
 
 def main():
@@ -17,9 +20,20 @@ def main():
     py_board = Pyboard(7, 6, game_board)
     clock = pygame.time.Clock()
     pygame.display.update()
-
+    # Load in weights   
+    x = load_weights()
+    NN = NeuralNetwork([42, 20, 7], x)
     p_loop(clock, py_board, heur1)
 
+
+def load_weights():
+    data = csv.reader(open("trained_weights.txt"), delimiter=",")
+    data = np.array(list(data))
+    
+    
+    
+    
+    return data
 
 def p_loop(clock, py_board, heur1):
     players = ["p", "p"]
@@ -89,6 +103,14 @@ def p_loop(clock, py_board, heur1):
                 player = (player + 1) % 2
 
             elif button == 30 and not winner: # neural
+                # Before game load load in weights
+                # flatten board with numoy
+                # pass in to nn
+                #      Call .step from NNClass
+                # take highest output
+                # take target  
+                # place piece in board
+
                 pass
 
             elif button == 13:     # reset board
