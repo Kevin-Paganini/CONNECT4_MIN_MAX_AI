@@ -1,11 +1,7 @@
 import numpy as np
 from copy import deepcopy
 from scipy.signal import convolve2d
-from board import Board
 import time
-
-from NullBoard import NullBoard
-
 
 class Connect4():
 
@@ -19,6 +15,9 @@ class Connect4():
         self.board = np.full((self.height, self.width), -1)
         #self.board = np.arange(42).reshape(self.height, self.width) #FIXME for debugging evals
         #self.check_winner(1)
+
+    def clear_board(self):
+        self.board = np.full((self.height, self.width), -1)
 
     def is_open(self, pos):
         pos = pos-1
@@ -108,5 +107,11 @@ class Connect4():
                 
                 return True
         return False
+
+    def is_full(self):
+        for i in range(1, 7):
+            if self.is_open(i):
+                return False
+        return True
                 
         
