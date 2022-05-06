@@ -17,15 +17,14 @@ PLAYER_0_COLOR = (51, 162, 29)
 PLAYER_1_COLOR = (200, 34, 27)
 EMPTY = (28, 26, 26)
 
-PLAYER_B_X_BUFF = 70
-PLAYER1_B_Y = 850
-PLAYER2_B_Y = 910
+PLAYER_B_X_BUFF = 20
+PLAYER1_B_Y = 880
+PLAYER2_B_Y = PLAYER1_B_Y + 60
 PLAYER_BUTTON_WIDTH = 90
 P_B_PADDING = 5
+P_B_SPACING = 10
 
-poss_players = ["p", "m", "r", "n"]
-p1_color = [GREEN, WHITE, WHITE]
-p2_color = [GREEN, WHITE, WHITE]
+poss_players = ["p", "m", "n", "r"]
 FONT = 'freesansbold.ttf'
 #FONT = "C:\Windows\Fonts\Arial.ttf"
 
@@ -42,8 +41,8 @@ class Pyboard:
         self.buff = 52.5
         self.bottom_of_board = HEIGHT - (HEIGHT - self.square_size*6)-2
         self.players = ["p", "p"]
-        self.p1_color = [WHITE, WHITE, WHITE]#, WHITE]
-        self.p2_color = [WHITE, WHITE, WHITE]#, WHITE]
+        self.p1_color = [WHITE, WHITE, WHITE, WHITE]
+        self.p2_color = [WHITE, WHITE, WHITE, WHITE]
 
         self.create_board()
 
@@ -65,15 +64,19 @@ class Pyboard:
         self.set_up_buttons(self.players)
 
     def set_up_buttons(self, players):   #pygame.Rect((left, top), (width, height)
-        x = WIDTH / 2
-        self.init_side_button("Start", x, GREEN, 40)   #490, 850 | 560, 890
-        self.init_side_button("Reset", x, RED, 90)     #490, 900 | 560, 940
-        self.init_side_button("Quit", x, WHITE, 140)     #490, 900 | 560, 940
-
+        self.refresh_midline_buttons([GREEN, RED])
         self.refresh_side_buttons(players)
 
-    """
-    def refresh_side_buttons2(self, players):
+    def refresh_midline_buttons(self, colors):
+        x = WIDTH/2 + 110
+        y = self.bottom_of_board + 10
+        buff = 45
+        self.init_side_button2(x, "Start", colors[0], y+buff)
+        self.init_side_button2(x, "Reset", colors[1], y+buff*2)
+        self.init_side_button2(x, "Quit", WHITE, y+buff*3)
+
+
+    def refresh_side_buttons(self, players):
         self.p1_color = [WHITE, WHITE, WHITE, WHITE]
         self.p2_color = [WHITE, WHITE, WHITE, WHITE]
         idx1 = poss_players.index(players[0])
@@ -81,46 +84,34 @@ class Pyboard:
         self.p1_color[idx1] = GREEN
         self.p2_color[idx2] = GREEN
 
+        c_r_right = self.init_side_button2(PLAYER_B_X_BUFF, "Player 1", BLACK, PLAYER1_B_Y)
+        c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Human", self.p1_color[0], PLAYER1_B_Y)
+        c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Minimax", self.p1_color[1], PLAYER1_B_Y)
+        c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Neural", self.p1_color[2], PLAYER1_B_Y)
+        self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Random", self.p1_color[3], PLAYER1_B_Y)
+
+        c_r_right = self.init_side_button2(PLAYER_B_X_BUFF, "Player 2", BLACK, PLAYER2_B_Y)
+        c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Human", self.p2_color[0],PLAYER2_B_Y)
+        c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Minimax", self.p2_color[1], PLAYER2_B_Y)
+        c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Neural", self.p2_color[2],PLAYER2_B_Y)
+        self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Random", self.p2_color[3], PLAYER2_B_Y)
 
 
-    def init_side_button2(self):
-    """
-
-
-    def refresh_side_buttons(self, players):
-        self.p1_color = [WHITE, WHITE, WHITE]
-        self.p2_color = [WHITE, WHITE, WHITE]
-        idx1 = poss_players.index(players[0])
-        idx2 = poss_players.index(players[1])
-        self.p1_color[idx1] = GREEN
-        self.p2_color[idx2] = GREEN
-
-        x = 70
-        self.init_side_button("Player 1", x, BLACK, 0)
-        self.init_side_button("Human", x, self.p1_color[0], 45)  # 25, 860 | 115, 895
-        self.init_side_button("Minimax", x, self.p1_color[1], 90)  # 20, 900 | 120, 940
-        self.init_side_button("Random", x, self.p1_color[2], 135)  # 20, 950 | 120, 990
-
-        x = 200
-        self.init_side_button("Player 2", x, BLACK, 0)
-        self.init_side_button("Human", x, self.p2_color[0], 45)  # 155 860 | 245, 895
-        self.init_side_button("Minimax", x, self.p2_color[1], 90)  # 150 900 | 250, 940
-        self.init_side_button("Random", x, self.p2_color[2], 135)  # 150 950 | 250, 990
-
-    def init_midline_button(self, text, color, buffer):
-        self.init_side_button(text, WIDTH/2, color, buffer)
-
-    def init_side_button(self, text, x, color, buffer):
+    def init_side_button2(self, x_pos, string, color, y):
+        pad = P_B_PADDING
         font = pygame.font.Font(FONT, 20)
-        text = font.render(text, True, BLACK, WHITE)
+        text = font.render(string, True, BLACK, WHITE)
         text_rect = text.get_rect()
-        text_rect.center = (x, self.bottom_of_board + 25 + buffer)
-        color_rect = pygame.Rect((text_rect.left - 10, text_rect.top - 10), (text_rect.width + 20, text_rect.height + 20))
-        white_rect = pygame.Rect((text_rect.left - 5, text_rect.top - 5), (text_rect.width + 10, text_rect.height + 10))
-        print(text_rect.width)
+        text_rect.center = (x_pos + PLAYER_BUTTON_WIDTH/2, y)
+        color_rect = pygame.Rect((text_rect.left - pad*2, text_rect.top - pad*2), (PLAYER_BUTTON_WIDTH + pad*4, text_rect.height + pad*4))
+        color_rect.center = text_rect.center
+        white_rect = pygame.Rect((text_rect.left - pad, text_rect.top - pad), (PLAYER_BUTTON_WIDTH + pad*2, text_rect.height + pad*2))
+        white_rect.center = text_rect.center
         pygame.draw.rect(self.win, color, color_rect)
         pygame.draw.rect(self.win, WHITE, white_rect)
         self.win.blit(text, text_rect)
+        #print(str(string) + ": " + str(color_rect.left - 10) + " < x < " + str(color_rect.right + 10) + " and " + str(color_rect.top - 5) + " < y < " + str(color_rect.bottom + 5) + ":")
+        return color_rect.right
 
     def is_open(self, col):
         return self.board.is_open(col)
@@ -146,38 +137,31 @@ class Pyboard:
     def get_button_from_mouse(self, mouse):
         x = mouse[0]
         y = mouse[1]
-        if 490 < x < 560 and 850 < y < 890:
+        if 615 < x < 745 and 838 < y < 888:
             return 12 # start button
-        if 490 < x < 560 and 900 < y < 940:
+        if 615 < x < 745 and 883 < y < 933:
             return 13 # reset button
-        if 490 < x < 560 and 950 < y < 990:
+        if 615 < x < 745 and 928 < y < 978:
             pygame.quit()
             sys.exit()
-        if 25 < x < 115 and 860 < y < 895:
+        if 115 < x < 245 and 855 < y < 905:
             return 15 # human p1
-        if 20 < x < 120 and 900 < y < 940:
+        if 230 < x < 360 and 855 < y < 905:
             return 16 # minimax p1
-        if 20 < x < 120 and 950 < y < 990:
+        if 345 < x < 475 and 855 < y < 905:
+            return 21 # nearual net p1
+        if 460 < x < 590 and 855 < y < 905:
             return 17 # random p1
-        if 155 < x < 245 and 860 < y < 895:
+        if 115 < x < 245 and 915 < y < 965:
             return 18  # human p2
-        if 150 < x < 250 and 900 < y < 940:
+        if 230 < x < 360 and 915 < y < 965:
             return 19  # minimax p2
-        if 150 < x < 250 and 950 < y < 990:
+        if 345 < x < 475 and 915 < y < 965:
+            return 22 # neural net p2
+        if 460 < x < 590 and 915 < y < 965:
             return 20  # random p2
         return 0
 
-    def clear_p1_buttons(self):
-        x = 70
-        self.init_side_button("Human", x, WHITE, 45)  # 25, 860 | 115, 895
-        self.init_side_button("Minimax", x, WHITE, 90)  # 20, 900 | 120, 940
-        self.init_side_button("Random", x, WHITE, 135)  # 20, 950 | 120, 990
-
-    def clear_p2_buttons(self):
-        x = 200
-        self.init_side_button("Human", x, WHITE, 45)  # 155 860 | 245, 895
-        self.init_side_button("Minimax", x, WHITE, 90)  # 150 900 | 250, 940
-        self.init_side_button("Random", x, WHITE, 135)  # 150 950 | 250, 990
 
     def update_mouse_pos(self, mouse):
         self.display_mouse(mouse)
