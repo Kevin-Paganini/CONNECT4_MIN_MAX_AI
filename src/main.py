@@ -16,20 +16,23 @@ BOARD_HEIGHT = 6
 IN_A_ROW = 4
 
 valid_inputs = [1, 2, 3, 4, 5, 6, 7]
-players = ["p", "p"]
+players = ["m", "r"]
 
 
 def main():
     while True:
-        inp = input("Text(t), pygame(p), setPlayers(s), quit(q)?: ")
+        inp = input("Text(t), pygame(p), setPlayers(s), quit(q), collect data(c)?: ")
         if inp == "t":
             text_game_loop2()
         elif inp == "p":
             pyGameLoop()
         elif inp == "s":
             setPlayers()
+        elif inp == "c":
+            collect_data()
         elif inp == "q":
             break
+
 
 def setPlayers():
     player1choice = input("Plese enter player one choice (m for minimax, p for player, r for random): ")
@@ -107,15 +110,8 @@ def run_pygame_loop(game, clock, py_board):
     while run:
         clock.tick(FPS)
         pygame.display.update()
-        if game.is_there_a_winner():
-            if game.check_winner(0):
-                print(f'Player 0 is the winner... ({players[player]})')
-            else:
-                player = (player + 1) % 2
-                print(f'Player 1 is the winner... ({players[player]})')
-            pygame.quit()
-            run = False
-            break
+        
+            
 
         if players[player] == "p":
             
@@ -134,7 +130,7 @@ def run_pygame_loop(game, clock, py_board):
                         print("no space to drop")
 
         elif players[player] == "m":
-            val, pos = minimax.get_move(game, 5, player, heur1)
+            val, pos = minimax.get_move(game, 6, player, heur1)
             row = game.place_piece(pos, player)
             if row != -1:
                 py_board.place_piece(row, pos, player)
@@ -153,6 +149,7 @@ def run_pygame_loop(game, clock, py_board):
 
         if game.is_there_a_winner():
             pygame.display.update()
+            player = (player + 1) % 2
             if game.check_winner(0):
                 winner = f'Player 0 is the winner... ({players[player]})'
             else:
@@ -165,7 +162,72 @@ def run_pygame_loop(game, clock, py_board):
 
 
 
+def collect_data():
+    for i in range(1000):
+        board = Connect4(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
+        heur1 = CountingInARow(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
+        board.print_board()
+        player = 0
+        count = 0
+        run = True
+        rate = 0.4
+        with open("data.txt", "a") as f:
+            while run:
+                
+
+                if players[player] == "r":
+                    count += 1
+                    if board.is_there_a_winner():
+                        run = False
+
+                    if count % 2 == 0:
+
+                        if random.random() > 0.2:
+
+                            val, pos = minimax.get_move(board, 3, player, heur1)
+                            board.place_piece(pos, player)
+                        else:
+                            pos = get_random_move(player, board)
+                            board.place_piece(pos, player)
+                    else:
+                        if random.random() < rate:
+
+                            pos = get_random_move(player, board)
+                            board.place_piece(pos, player)
+                        else:
+                            val, pos = minimax.get_move(board, 1, player, heur1)
+                            board.place_piece(pos, player)
+                    f.write(str(pos) + ", ")
+                                    
+                    
+                elif players[player] == "m":
+                    if board.is_there_a_winner():
+                        run = False
+                    val, pos = minimax.get_move(board, 6, player, heur1)
+                    board.place_piece(pos, player)
+                    f.write(str(pos) + ", ")
+                    
+                player = (player + 1) % 2
+                board.print_board()
+                
+                if board.is_there_a_winner():
+                    run = False
+               
+                
+            
+            if board.is_there_a_winner():
+                
+                if board.check_winner(0):
+                    f.write(str(0))
+                else:
+                    f.write(str(1))
+            else:
+                f.write(str(-1))
+            f.write("\n")
+
+           
 
 
 if __name__ == '__main__':
+    
     main()
