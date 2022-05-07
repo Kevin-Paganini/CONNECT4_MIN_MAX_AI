@@ -27,13 +27,69 @@ def main():
 
 
 def load_weights():
-    data = csv.reader(open("trained_weights.txt"), delimiter=",")
-    data = np.array(list(data))
+    # with open('trained_weights.txt', 'r') as tw:
+    #     w = []
+    #     weight = []
+    #     overall_weight = []
+    #     for line in tw:
+            
+            
+    #         if ']],' in line:
+    #             line = line.replace(']],', '')
+    #             line = line.split(' ')
+    #             for x in line:
+    #                 if x != '':
+    #                     weight.append(float(x))
+                
+
+    #             w.append(weight)
+               
+    #             overall_weight.append(w)
+    #             weight = []
+    #             w = []
+
+
+    #         elif ']' in line:
+    #             line = line.replace("[", '')
+    #             line = line.replace(']', '')
+    #             line = line.split(" ")
+    #             for x in line:
+    #                 if x != '':
+    #                     weight.append(float(x))
+                
+    #             w.append(weight)
+                
+    #             weight = []
+    #         else:
+    #             line = line.replace("[", '')
+    #             line = line.replace('[[', '')
+    #             line = line.split(" ")
+    #             for x in line:
+    #                 if x != '':
+    #                     weight.append(float(x))
+
+        
     
+
+  
     
+    # ret = np.array([overall_weight], dtype=object)
+    # print(ret)
+    # save np.load
+    np_load_old = np.load
+
+    # modify the default parameters of np.load
+    np.load = lambda *a,**k: np_load_old(*a, allow_pickle=True, **k)
+
     
+
     
-    return data
+    with open('best_weights_0.npy', 'rb') as f:
+        ret = np.load(f)
+    print(ret)
+    # restore np.load for future normal usage
+    np.load = np_load_old
+    return ret
 
 def p_loop(clock, py_board, heur1, NN):
     players = ["p", "p"]
@@ -108,9 +164,14 @@ def p_loop(clock, py_board, heur1, NN):
                 # take target  
                 # place piece in board
 
-                f_board = py_board.get_board().flatten()
+                f_board = py_board.get_board()
+          
+                f_board = f_board.board.flatten()
                 out = NN.step(f_board)
+                print(f'Board input: {f_board}')
+                print(f'NN out: {out}')
                 col = np.argmax(out) + 1
+                print(col)
                 if py_board.is_open(col):
                     py_board.place_piece(col, player)
                 else:
