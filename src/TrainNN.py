@@ -4,9 +4,12 @@ import numpy as np
 
 from NeuralNetwork import NNProblem
 
-def test_GA(x, y, verbose = True):  #[[outputs]] or [outputs]
-    layers = [42, 20, 7]
 
+
+
+def test_GA(x, y, verbose = True):  #[[outputs]] or [outputs]
+    FILE_COUNTER = 0
+    layers = [42, 20, 7]
     pop_size = 100
     num_epochs = 200
     problem = NNProblem(x, y, layers)
@@ -18,7 +21,8 @@ def test_GA(x, y, verbose = True):  #[[outputs]] or [outputs]
         initial = problem.create_population(pop_size)
         ans = train(problem, initial, num_epochs, verbose)
         print("Run ", i)
-        examine_best(problem, ans)
+        examine_best(problem, ans, FILE_COUNTER)
+        FILE_COUNTER += 1
         if problem.solved_problem(ans, 0.99):
             solve_rate += 1
     print("GA run " + str(num_restarts) + " times.")
@@ -52,12 +56,14 @@ def train(problem, initial, epochs = 10, elites = 2, verbose = True):
     weights = [problem.evaluate(i) for i in population]
     return population[np.argmax(weights)]
 
-def examine_best(problem, best):
+def examine_best(problem, best, FILE_COUNTER):
+    file_name = f'best_weights_2_{FILE_COUNTER}.npy'
+    
     print("Final fitness")
     print(problem.evaluate(best))
     
     print("Best weights ")
-    with open('t_w.npy', 'wb') as f:
+    with open(file_name, 'wb') as f:
         np.save(f, best._W)
     
             
@@ -107,4 +113,5 @@ def main():
     train_connect4_network()
 
 if __name__ == '__main__':
+    
     main()

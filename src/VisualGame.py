@@ -84,7 +84,7 @@ def load_weights():
     
 
     
-    with open('t_w.npy', 'rb') as f:
+    with open('best_weights_0.npy', 'rb') as f:
         ret = np.load(f)
     print(ret)
     # restore np.load for future normal usage
@@ -168,6 +168,8 @@ def p_loop(clock, py_board, heur1, NN):
           
                 f_board = f_board.board.flatten()
                 out = NN.step(f_board)
+                print(f'Board input: {f_board}')
+                print(f'NN out: {out}')
                 col = np.argmax(out) + 1
                 print(col)
                 if py_board.is_open(col):
