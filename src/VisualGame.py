@@ -114,6 +114,7 @@ def p_loop(clock, py_board, heur1, NN):
                 if py_board.is_open(col):
                     py_board.place_piece(col, player)
                 else:
+                    print("Neural failed")
                     val, pos = minimax.get_move(py_board.get_board(), 4, player, heur1)
                     py_board.place_piece(pos, player)
                 player = (player + 1) % 2
