@@ -57,7 +57,7 @@ class NeuralNetwork():
         #FIXME - Iterate over the layers and calculate the activation
         # for each given the activation of the prior layer and the weights
         # in W
-
+        
         for i in range(len(self._W)):
             #w = np.vstack([[1 for i in range(len(self._W[i][0]))], self._W[i]])             #adds an array of 1s to the top for bias
             self._a[i] = [np.insert(self._a[i][j], 0, 1) for j in range(len(self._a[i]))]   #adds a 1 to the front of inputs for bias

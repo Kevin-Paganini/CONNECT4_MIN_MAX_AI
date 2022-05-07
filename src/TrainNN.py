@@ -57,11 +57,11 @@ def examine_best(problem, best):
     print(problem.evaluate(best))
     
     print("Best weights ")
-    with open("trained_weights.txt", "a")as w:
-        for x in best._W:
-
-            w.write(str(x))
-            w.write(",")
+    with open('t_w.npy', 'wb') as f:
+        np.save(f, best._W)
+    
+            
+            
         
     for w in best._W:
         print(w)
@@ -100,7 +100,7 @@ def accuracy(x, y, nn):
 
 def train_connect4_network():
     x, y = load_boards_targets_txt("boards_and_targets.txt")
-    test_GA(x[:100], y[:100], True)
+    test_GA(x, y, True)
 
 def main():
     

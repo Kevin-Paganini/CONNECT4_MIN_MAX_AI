@@ -27,46 +27,69 @@ def main():
 
 
 def load_weights():
-    with open('trained_weights.txt', 'r') as tw:
-        for line in tw:
-            w = []
-            weight = []
-            overall_weight = []
+    # with open('trained_weights.txt', 'r') as tw:
+    #     w = []
+    #     weight = []
+    #     overall_weight = []
+    #     for line in tw:
             
-            if line.contains(']],'):
-                line = line.replace(']],', '')
-                line = line.split(' ')
-                line = [float(x) for x in line]
-                weight.append(line)
-                w.append(weight)
+            
+    #         if ']],' in line:
+    #             line = line.replace(']],', '')
+    #             line = line.split(' ')
+    #             for x in line:
+    #                 if x != '':
+    #                     weight.append(float(x))
+                
 
-                overall_weight.append(w)
-                weight = []
-                w = []
+    #             w.append(weight)
+               
+    #             overall_weight.append(w)
+    #             weight = []
+    #             w = []
 
 
-            elif line.contains(']'):
-                line = line.replace("[", '')
-                line = line.replace(']', '')
-                line = line.split(" ")
-                line = [float(x) for x in line]
-                weight.append(line)
-                w.append(weight)
-                weight = []
-            else:
-                line = line.replace("[", '')
-                line = line.split(" ")
-                line = [float(x) for x in line]
-                weight.append(line)
+    #         elif ']' in line:
+    #             line = line.replace("[", '')
+    #             line = line.replace(']', '')
+    #             line = line.split(" ")
+    #             for x in line:
+    #                 if x != '':
+    #                     weight.append(float(x))
+                
+    #             w.append(weight)
+                
+    #             weight = []
+    #         else:
+    #             line = line.replace("[", '')
+    #             line = line.replace('[[', '')
+    #             line = line.split(" ")
+    #             for x in line:
+    #                 if x != '':
+    #                     weight.append(float(x))
 
-        print(w)
+        
     
 
   
     
+    # ret = np.array([overall_weight], dtype=object)
+    # print(ret)
+    # save np.load
+    np_load_old = np.load
+
+    # modify the default parameters of np.load
+    np.load = lambda *a,**k: np_load_old(*a, allow_pickle=True, **k)
+
     
+
     
-    return w
+    with open('t_w.npy', 'rb') as f:
+        ret = np.load(f)
+    print(ret)
+    # restore np.load for future normal usage
+    np.load = np_load_old
+    return ret
 
 def p_loop(clock, py_board, heur1, NN):
     players = ["p", "p"]
@@ -141,9 +164,12 @@ def p_loop(clock, py_board, heur1, NN):
                 # take target  
                 # place piece in board
 
-                f_board = py_board.get_board().flatten()
+                f_board = py_board.get_board()
+          
+                f_board = f_board.board.flatten()
                 out = NN.step(f_board)
                 col = np.argmax(out) + 1
+                print(col)
                 if py_board.is_open(col):
                     py_board.place_piece(col, player)
                 else:
