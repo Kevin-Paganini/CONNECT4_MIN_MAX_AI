@@ -164,37 +164,23 @@ class NNProblem():
         :param state: neural network object
         :return: Accuracy of network output compared to the targets
         """
-        thres = 0.95
+        thres = 0.9
         match = 0
 
         for i in range(len(self._input)):
             output = state.step(self._input[i])
             target = self._y[i][0] # this can be 1, 2, 3, 4, 5, 6, 7
-            # These checks are checking that the target is above threshold and all the others are below it
-            # THis makes sure that the Neural network does not simply put all the outputs above the threshold and say
-            # that hes doing well cause hes really not, hes just being stupid
-            if target == 1: 
-                if output[0][0] >= thres and output[0][1] < thres and output[0][2] < thres and output[0][3] < thres and output[0][4] < thres and output[0][5] < thres and output[0][6] < thres:
-                    match += 1
-            elif target == 2:
-                if output[0][0] < thres and output[0][1] >= thres and output[0][2] < thres and output[0][3] < thres and output[0][4] < thres and output[0][5] < thres and output[0][6] < thres:
-                    match += 1            
-            elif target == 3:
-                if output[0][0] < thres and output[0][1] < thres and output[0][2] >= thres and output[0][3] < thres and output[0][4] < thres and output[0][5] < thres and output[0][6] < thres:
-                    match += 1
-            elif target == 4:
-                if output[0][0] < thres and output[0][1] < thres and output[0][2] < thres and output[0][3] >= thres and output[0][4] < thres and output[0][5] < thres and output[0][6] < thres:
-                    match += 1
-            elif target == 5:
-                if output[0][0] < thres and output[0][1] < thres and output[0][2] < thres and output[0][3] < thres and output[0][4] >= thres and output[0][5] < thres and output[0][6] < thres:
-                    match += 1
-            elif target == 6:
-                if output[0][0] < thres and output[0][1] < thres and output[0][2] < thres and output[0][3] < thres and output[0][4] < thres and output[0][5] >= thres and output[0][6] < thres:
-                    match += 1
-            elif target == 7:
-                if output[0][0] < thres and output[0][1] < thres and output[0][2] < thres and output[0][3] < thres and output[0][4] < thres and output[0][5] < thres and output[0][6] >= thres:
-                    match += 1
-            
+            """
+            output_target = output[0][target-1]
+            left_output = output[0][:target-1]
+            right_output = output[0][target:]
+            not_output_target = np.append(left_output, right_output)
+
+            if output_target > thres and not_output_target[np.argmax(not_output_target)] < thres:
+                match += 1
+            """
+            if np.argmax(output)+1 == target:
+                match += 1
 
         return match/(len(self._y)*len(self._y[0]))
 

@@ -84,7 +84,7 @@ def load_weights():
     
 
     
-    with open('best_weights_0.npy', 'rb') as f:
+    with open('best_weights_2_Aaron_Version_0.npy', 'rb') as f:
         ret = np.load(f)
     print(ret)
     # restore np.load for future normal usage
@@ -168,15 +168,14 @@ def p_loop(clock, py_board, heur1, NN):
           
                 f_board = f_board.board.flatten()
                 out = NN.step(f_board)
-                print(f'Board input: {f_board}')
-                print(f'NN out: {out}')
                 col = np.argmax(out) + 1
-                print(col)
+                val, pos = minimax.get_move(py_board.get_board(), 4, player, heur1)
+                print("\nWhat NN picks: " + str(col))
+                print("What Minimax picks: " + str(pos))
                 if py_board.is_open(col):
                     py_board.place_piece(col, player)
                 else:
-                    print("Neural failed")
-                    val, pos = minimax.get_move(py_board.get_board(), 4, player, heur1)
+                    print("NN picked full col")
                     py_board.place_piece(pos, player)
                 player = (player + 1) % 2
 

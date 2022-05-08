@@ -1,5 +1,5 @@
 import csv
-
+import time
 import numpy as np
 
 from NeuralNetwork import NNProblem
@@ -7,11 +7,11 @@ from NeuralNetwork import NNProblem
 
 
 
-def test_GA(x, y, verbose = True):  #[[outputs]] or [outputs]
+def test_GA(x, y, verbose = True):  #[[outputs]]
     FILE_COUNTER = 0
-    layers = [42, 20, 7]
-    pop_size = 100
-    num_epochs = 200
+    layers = [42, 31, 20, 12, 7]
+    pop_size = 25
+    num_epochs = 60
     problem = NNProblem(x, y, layers)
 
     num_restarts = 5
@@ -30,10 +30,14 @@ def test_GA(x, y, verbose = True):  #[[outputs]] or [outputs]
 
 def train(problem, initial, epochs = 10, elites = 2, verbose = True):
     population = initial
+    total_time = 0
+    t_count = 0
+    mut_rate = 0.001
 
     if verbose:
         print("\nStarting GA\n")
     for i in range(epochs):
+        start = time.time()
         weights = [problem.evaluate(i) for i in population]
 
         pairs = [(population[i], weights[i]) for i in range(len(population))]  # sorting based on fitness
@@ -45,19 +49,23 @@ def train(problem, initial, epochs = 10, elites = 2, verbose = True):
         while len(new_population) < len(population):
             parent = problem.selection(population, weights, 2)
             child1 = problem.crossover(parent[0], parent[1])
-            child1 = problem.mutate(child1, None, 0, 10)
+            child1 = problem.mutate(child1, mut_rate, 0, 10)
             new_population.append(child1)
         population = new_population
         best = problem.found_solution(population)
+        end = time.time()
+        total_time += (end-start)
+        t_count += 1
+        avg_time = total_time / t_count
         if best is not None:
             return best
         if verbose:
-            print("Epoch " + str(i) + ".Fitness: ", np.max(weights))
+            print("Epoch " + str(i) + ".Fitness: " + str(np.max(weights)) + " Time: " + str(end-start) + " Expected Time Left: " + str(((200-i-1) * avg_time) / 60) + " minutes")
     weights = [problem.evaluate(i) for i in population]
     return population[np.argmax(weights)]
 
 def examine_best(problem, best, FILE_COUNTER):
-    file_name = f'best_weights_2_{FILE_COUNTER}.npy'
+    file_name = f'best_weights_2_Aaron_Version_{FILE_COUNTER}.npy'
     
     print("Final fitness")
     print(problem.evaluate(best))
