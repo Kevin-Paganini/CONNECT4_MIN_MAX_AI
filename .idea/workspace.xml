@@ -6,10 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="ab7985ab-33b8-4946-8d83-acd97ca7dd89" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Connect4.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Connect4.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/NeuralNetwork.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/NeuralNetwork.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Pyboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Pyboard.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TrainNN.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/TrainNN.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/VisualGame.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/VisualGame.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/best_weights_2_Aaron_Version_0.npy" beforeDir="false" afterPath="$PROJECT_DIR$/src/best_weights_2_Aaron_Version_0.npy" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,8 +115,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.TrainNN" />
         <item itemvalue="Python.VisualGame" />
+        <item itemvalue="Python.TrainNN" />
         <item itemvalue="Python.textGame" />
       </list>
     </recent_temporary>
