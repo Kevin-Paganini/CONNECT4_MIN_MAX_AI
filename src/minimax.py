@@ -16,12 +16,13 @@ def max_value(board, d, player, limit, alpha, beta, heur):
     ply_player = (player + d) % 2
     for a in range(7): # all possible moves
         if board.is_open(a+1):
+            # We added heuristic here, because we wanted to try out some different ones
             val2, act2 = min_value(board.get_next_move(board, a+1, ply_player), d + 1, player, limit, alpha, beta, heur)
-            #print(val2)
+            
             if val2 > v:
                 v = val2
                 act = a+1
-                alpha = max(alpha, v)
+                alpha = max(alpha, v) # ALPHA-BETA PRUNING
             if v >= beta:
                 return [v, act]
     return [v, act]
@@ -38,11 +39,12 @@ def min_value(board, d, player, limit, alpha, beta, heur):
     ply_player = (player + d) % 2
     for a in range(7): # all possible moves
         if board.is_open(a+1):
+            # We added heuristic here, because we wanted to try out some different ones
             val2, act2 = max_value(board.get_next_move(board, a+1, ply_player), d + 1, player, limit, alpha, beta, heur)
             if val2 < v:
                 v = val2
                 act = a+1
-                beta = min(beta, v)
+                beta = min(beta, v) #ALPHA-BETA PRUNING
             if v <= alpha:
                 return [v, act]
     return [v, act]

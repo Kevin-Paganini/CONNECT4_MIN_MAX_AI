@@ -38,6 +38,7 @@ def load_weights():
     weights = 'size100_[42, 20, 7]_pop100_ep500_mut0.001_el5_fit0.57'
     #weights = 'best_weights_2_Aaron_Version_0.npy'
     
+    
     with open(weights, 'rb') as f:
         ret = np.load(f)
     #print(ret)
