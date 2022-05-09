@@ -24,7 +24,7 @@ PLAYER_BUTTON_WIDTH = 90
 P_B_PADDING = 5
 P_B_SPACING = 10
 
-poss_players = ["p", "m", "n", "r"]
+poss_players = ["Human", "Minimax", "Neural", "Random"]
 FONT = 'freesansbold.ttf'
 #FONT = "C:\Windows\Fonts\Arial.ttf"
 
@@ -40,7 +40,7 @@ class Pyboard:
         self.curr_col = 0
         self.buff = 52.5
         self.bottom_of_board = HEIGHT - (HEIGHT - self.square_size*6)-2
-        self.players = ["p", "p"]
+        self.players = ["Human", "Human"]
         self.p1_color = [WHITE, WHITE, WHITE, WHITE]
         self.p2_color = [WHITE, WHITE, WHITE, WHITE]
 
@@ -59,9 +59,9 @@ class Pyboard:
         pygame.draw.line(self.win, BLACK, (self.buff, 0), (self.buff, self.bottom_of_board))
         pygame.draw.rect(self.win, YELLOW, pygame.Rect((0, self.bottom_of_board), (WIDTH, HEIGHT-self.bottom_of_board)))
         pygame.draw.line(self.win, BLACK, (self.buff, self.bottom_of_board-1), (WIDTH-self.buff, self.bottom_of_board-1))
-        self.display_info("Hit start to start the game, or pick the players!")
 
         self.set_up_buttons(self.players)
+        self.display_info("Hit start to start the game, or pick the players!")
 
     def set_up_buttons(self, players):   #pygame.Rect((left, top), (width, height)
         self.refresh_midline_buttons([GREEN, RED])
@@ -190,12 +190,12 @@ class Pyboard:
         pygame.draw.rect(self.win, YELLOW, back)
         self.win.blit(text, text_rect)
 
-    def is_winner(self):
+    def is_winner(self, players):
         if self.board.check_winner(0):
-            self.display_info("Player 1 is the winner!")
+            self.display_info("Player 1 (" + players[0] + ") is the winner!")
             return True
         elif self.board.check_winner(1):
-            self.display_info("Player 2 is the winner!")
+            self.display_info("Player 2 (" + players[1] + ") is the winner!")
             return True
         elif self.board.is_full():
             self.display_info("It's a draw!")
@@ -210,9 +210,7 @@ class Pyboard:
         text_rect.center = (WIDTH/2, self.bottom_of_board + 15)
         pygame.draw.rect(self.win, YELLOW, pygame.Rect((text_rect.centerx-250, text_rect.top - 5), (500, text_rect.height + 10)))
         self.win.blit(text, text_rect)
-
-    def display_info2(self, info):
-        self.display_info(info)
+        pygame.display.update()
 
     def clear_stuff(self, players):
         self.board.clear_board()

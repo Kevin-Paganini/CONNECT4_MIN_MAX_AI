@@ -228,7 +228,7 @@ class NNProblem():
         :return: Result of combining part the genome of parent1 with part the genome of parent2
         """
 
-        return state1;
+        return state1
 
     def mutate(self, state, rate=None, mu=0, s=10):
         """

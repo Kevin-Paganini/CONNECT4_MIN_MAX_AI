@@ -27,106 +27,60 @@ def main():
 
 
 def load_weights():
-    # with open('trained_weights.txt', 'r') as tw:
-    #     w = []
-    #     weight = []
-    #     overall_weight = []
-    #     for line in tw:
-            
-            
-    #         if ']],' in line:
-    #             line = line.replace(']],', '')
-    #             line = line.split(' ')
-    #             for x in line:
-    #                 if x != '':
-    #                     weight.append(float(x))
-                
-
-    #             w.append(weight)
-               
-    #             overall_weight.append(w)
-    #             weight = []
-    #             w = []
-
-
-    #         elif ']' in line:
-    #             line = line.replace("[", '')
-    #             line = line.replace(']', '')
-    #             line = line.split(" ")
-    #             for x in line:
-    #                 if x != '':
-    #                     weight.append(float(x))
-                
-    #             w.append(weight)
-                
-    #             weight = []
-    #         else:
-    #             line = line.replace("[", '')
-    #             line = line.replace('[[', '')
-    #             line = line.split(" ")
-    #             for x in line:
-    #                 if x != '':
-    #                     weight.append(float(x))
-
-        
-    
-
-  
-    
-    # ret = np.array([overall_weight], dtype=object)
-    # print(ret)
-    # save np.load
     np_load_old = np.load
-
     # modify the default parameters of np.load
     np.load = lambda *a,**k: np_load_old(*a, allow_pickle=True, **k)
 
     
-
+    weights = 'size100_[42, 20, 7]_pop100_ep500_mut0.05_el5_fit0.54'
+    #weights = 'best_weights_2_Aaron_Version_25_0.05_200_1.npy'
+    weights = 'size100_[42, 20, 7]_pop100_ep500_mut0.001_el5_fit0.57'
+    #weights = 'best_weights_2_Aaron_Version_0.npy'
     
-    with open('best_weights_2_Aaron_Version_0.npy', 'rb') as f:
+    with open(weights, 'rb') as f:
         ret = np.load(f)
-    print(ret)
+    #print(ret)
     # restore np.load for future normal usage
     np.load = np_load_old
     return ret
 
 def p_loop(clock, py_board, heur1, NN):
-    players = ["p", "p"]
+    players = ["Human", "Human"]
     button = 0
     player = 0
     winner = False
     start = False
+    move_count = 0
     while button != -1:
         clock.tick(60)
         pygame.display.update()
 
-        if players[player] == "p" or not start or winner:
+        if players[player] == "Human" or not start or winner:
             button = int(listen(py_board))
-        elif players[player] == "r":
+        elif players[player] == "Random":
             button = 9      # random
-        elif players[player] == "m":
+        elif players[player] == "Minimax":
             button = 10     # minimax
         else:
             button = 30     # neural network
 
         if 14 < button < 23 and not start:    # set players
             if button == 15:
-                players[0] = "p"
+                players[0] = "Human"
             if button == 16:
-                players[0] = "m"
+                players[0] = "Minimax"
             if button == 17:
-                players[0] = "r"
+                players[0] = "Random"
             if button == 18:
-                players[1] = "p"
+                players[1] = "Human"
             if button == 19:
-                players[1] = "m"
+                players[1] = "Minimax"
             if button == 20:
-                players[1] = "r"
+                players[1] = "Random"
             if button == 21:
-                players[0] = "n"
+                players[0] = "Neural"
             if button == 22:
-                players[1] = "n"
+                players[1] = "Neural"
             py_board.refresh_side_buttons(players)
 
 
@@ -136,24 +90,34 @@ def p_loop(clock, py_board, heur1, NN):
             start = True
 
         if start:
+
+            depth = move_count//11 + 4
+            if depth > 6:
+                depth = 6
+
             if 0 < button < 8 and not winner:   # human
                 if py_board.place_piece(button, player):
                     player = (player+1) % 2
+                    move_count += 1
 
             elif button == 9 and not winner: # random
-                py_board.display_info2("Random player is thinking...")  # for some reason this isn't displaying?
+                py_board.display_info("Random player is thinking...")  # for some reason this isn't displaying?
                 time.sleep(0.2)
                 col = random.randint(1, 7)
                 while not py_board.is_open(col):
                     col = random.randint(1, 7)
                 py_board.place_piece(col, player)
                 player = (player + 1) % 2
+                move_count += 1
 
             elif button == 10 and not winner: # minimax
-                py_board.display_info2("Minimax is thinking...")    # for some reason this isn't displaying?
-                val, pos = minimax.get_move(py_board.get_board(), 4, player, heur1)
+                py_board.display_info("Minimax " + str(player+1) + " is thinking...")
+                depth = 2
+                val, pos = minimax.get_move(py_board.get_board(), depth, player, heur1)
+                time.sleep(0.2)
                 py_board.place_piece(pos, player)
                 player = (player + 1) % 2
+                move_count += 1
 
             elif button == 30 and not winner: # neural
                 # Before game load load in weights
@@ -163,32 +127,31 @@ def p_loop(clock, py_board, heur1, NN):
                 # take highest output
                 # take target  
                 # place piece in board
-
+                py_board.display_info("Neural Network " + str(player+1) + " is thinking...")
                 f_board = py_board.get_board()
-          
                 f_board = f_board.board.flatten()
                 out = NN.step(f_board)
                 col = np.argmax(out) + 1
-                val, pos = minimax.get_move(py_board.get_board(), 4, player, heur1)
-                print("\nWhat NN picks: " + str(col))
-                print("What Minimax picks: " + str(pos))
+                #print("\nWhat NN picks: " + str(col))
+                #print("What Minimax picks: " + str(pos))
                 if py_board.is_open(col):
+                    time.sleep(0.2)
                     py_board.place_piece(col, player)
                 else:
-                    print("NN picked full col")
+                    print("NN picked full col, using minimax")
+                    val, pos = minimax.get_move(py_board.get_board(), depth, player, heur1)
                     py_board.place_piece(pos, player)
                 player = (player + 1) % 2
-
-
-                pass
+                move_count += 1
 
             elif button == 13:     # reset board
                 py_board.clear_stuff(players)
                 winner = False
                 start = False
                 player = 0
+                move_count = 0
 
-        if not winner and py_board.is_winner():
+        if not winner and py_board.is_winner(players):
             winner = True
 
 def listen(py_board):

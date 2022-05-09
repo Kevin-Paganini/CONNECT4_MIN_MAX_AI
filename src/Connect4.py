@@ -87,6 +87,8 @@ class Connect4():
             return True
         if self.check_winner(1):
             return True
+        if self.is_full():
+            return True
         return False
 
     def check_winner(self, player):
