@@ -9,12 +9,12 @@ from NeuralNetwork import NNProblem
 
 def test_GA(x, y, verbose = True):  #[[outputs]]
     FILE_COUNTER = 0
-    layers = [42, 31, 20, 12, 7]
-    pop_size = 25
-    num_epochs = 60
+    layers = [42, 69, 28, 7]
+    pop_size = 1000
+    num_epochs = 10000
     problem = NNProblem(x, y, layers)
 
-    num_restarts = 5
+    num_restarts = 1
     solve_rate = 0
 
     for i in range(num_restarts):
@@ -23,7 +23,7 @@ def test_GA(x, y, verbose = True):  #[[outputs]]
         print("Run ", i)
         examine_best(problem, ans, FILE_COUNTER)
         FILE_COUNTER += 1
-        if problem.solved_problem(ans, 0.99):
+        if problem.solved_problem(ans, 0.9):
             solve_rate += 1
     print("GA run " + str(num_restarts) + " times.")
     print("Number of successes: " + str(solve_rate))
@@ -32,8 +32,8 @@ def train(problem, initial, epochs = 10, elites = 2, verbose = True):
     population = initial
     total_time = 0
     t_count = 0
-    mut_rate = 0.001
-
+    mut_rate = 0.9
+    elites = 25
     if verbose:
         print("\nStarting GA\n")
     for i in range(epochs):
@@ -47,9 +47,9 @@ def train(problem, initial, epochs = 10, elites = 2, verbose = True):
         new_population = [pairs[i][0] for i in range(elites)]
 
         while len(new_population) < len(population):
-            parent = problem.selection(population, weights, 2)
+            parent = problem.selection(population, weights, 10)
             child1 = problem.crossover(parent[0], parent[1])
-            child1 = problem.mutate(child1, mut_rate, 0, 10)
+            child1 = problem.mutate(state=child1, rate=mut_rate, mu=0, s=25)
             new_population.append(child1)
         population = new_population
         best = problem.found_solution(population)
@@ -60,12 +60,12 @@ def train(problem, initial, epochs = 10, elites = 2, verbose = True):
         if best is not None:
             return best
         if verbose:
-            print("Epoch " + str(i) + ".Fitness: " + str(np.max(weights)) + " Time: " + str(end-start) + " Expected Time Left: " + str(((200-i-1) * avg_time) / 60) + " minutes")
+            print("Epoch " + str(i) + ".Fitness: " + str(np.max(weights)) + " Time: " + str(end-start) + " Expected Time Left: " + str(((epochs-i-1) * avg_time) / 60) + " minutes")
     weights = [problem.evaluate(i) for i in population]
     return population[np.argmax(weights)]
 
 def examine_best(problem, best, FILE_COUNTER):
-    file_name = f'best_weights_2_Aaron_Version_{FILE_COUNTER}.npy'
+    file_name = f'best_weights_2_KP_42_69_28_7{FILE_COUNTER}.npy'
     
     print("Final fitness")
     print(problem.evaluate(best))
@@ -114,7 +114,7 @@ def accuracy(x, y, nn):
 
 def train_connect4_network():
     x, y = load_boards_targets_txt("boards_and_targets.txt")
-    test_GA(x, y, True)
+    test_GA(x[0:100], y[0:100], True)
 
 def main():
     

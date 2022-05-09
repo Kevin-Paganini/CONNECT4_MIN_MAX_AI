@@ -79,7 +79,7 @@ def get_player_move(player, board):
 
 
 def collect_data():
-    for i in range(1000):
+    for i in range(10):
         board = Connect4(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
         heur1 = CountingInARow(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
         board.print_board()
@@ -87,7 +87,8 @@ def collect_data():
         count = 0
         run = True
         rate = 0.4
-        with open("data.txt", "a") as f:
+        players = ["m", "m"]
+        with open("data_min_max6_v_min_max6.txt", "a") as f:
             while run:
                 
 

@@ -22,60 +22,12 @@ def main():
     pygame.display.update()
     # Load in weights   
     x = load_weights()
+    print(x)
     NN = NeuralNetwork([42, 20, 7], x)
     p_loop(clock, py_board, heur1, NN)
 
 
 def load_weights():
-    # with open('trained_weights.txt', 'r') as tw:
-    #     w = []
-    #     weight = []
-    #     overall_weight = []
-    #     for line in tw:
-            
-            
-    #         if ']],' in line:
-    #             line = line.replace(']],', '')
-    #             line = line.split(' ')
-    #             for x in line:
-    #                 if x != '':
-    #                     weight.append(float(x))
-                
-
-    #             w.append(weight)
-               
-    #             overall_weight.append(w)
-    #             weight = []
-    #             w = []
-
-
-    #         elif ']' in line:
-    #             line = line.replace("[", '')
-    #             line = line.replace(']', '')
-    #             line = line.split(" ")
-    #             for x in line:
-    #                 if x != '':
-    #                     weight.append(float(x))
-                
-    #             w.append(weight)
-                
-    #             weight = []
-    #         else:
-    #             line = line.replace("[", '')
-    #             line = line.replace('[[', '')
-    #             line = line.split(" ")
-    #             for x in line:
-    #                 if x != '':
-    #                     weight.append(float(x))
-
-        
-    
-
-  
-    
-    # ret = np.array([overall_weight], dtype=object)
-    # print(ret)
-    # save np.load
     np_load_old = np.load
 
     # modify the default parameters of np.load
