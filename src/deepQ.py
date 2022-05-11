@@ -1,9 +1,13 @@
 import numpy as np
 
 import tensorflow as tf
-from tensorflow.keras.layers import Dense, Activation, Input
-from tensorflow.keras.optimizers import Adam
 
+from tensorflow.python.keras.layers import Dense, Activation, Input
+
+############################################################
+# This is from Luke's team
+# DO NOT GRADE
+############################################################
 
 class Experience:
 
@@ -74,7 +78,7 @@ class DeepQLearning:
         model.add(Dense(16, activation='relu'))
         model.add(Dense(actions))
         self.model = model
-        self.model.compile(loss="mse", optimizer=Adam(learning_rate=self.alpha))
+        self.model.compile(loss="mse", optimizer=tf.keras.optimizers.Adam(learning_rate=self.alpha))
 
     def update(self, state, reward) -> int:
         """

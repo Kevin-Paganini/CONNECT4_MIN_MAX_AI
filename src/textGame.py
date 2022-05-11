@@ -4,6 +4,9 @@ import time
 import minimax
 from CountingInARow import CountingInARow
 
+# Text game implementation of connect 4 (Deprecated)
+
+
 FPS = 60
 BOARD_WIDTH = 7
 BOARD_HEIGHT = 6

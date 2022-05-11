@@ -1,8 +1,20 @@
+
+#######################################################
+# General purpose file for training, collecting data, and command prompt version
+#######################################################
+
+
+
 from Connect4 import Connect4
 import random
 import time
 import minimax
 from CountingInARow import CountingInARow
+from deepQ import DeepQLearning
+
+
+
+
 
 WIDTH = 1050
 HEIGHT = 800
@@ -14,22 +26,26 @@ IN_A_ROW = 4
 
 valid_inputs = [1, 2, 3, 4, 5, 6, 7]
 players = ["m", "r"]
+BATCH_SIZE = 16
+ql = DeepQLearning(states=42, actions=7, alpha=0.01, epsilon=.95, y=.95, batch_size=BATCH_SIZE, replay_mem_max=200, threshold=-5)
+
 
 
 def main():
-    # while True:
-    #     inp = input("Text(t), setPlayers(s), quit(q), collect data(c)?: ")
-    #     if inp == "t":
-    #         text_game_loop2()
-    #     elif inp == "s":
-    #         setPlayers()
-    #     elif inp == "c":
-    #         collect_data()
-    #     elif inp == "q":
-    #         break
+    while True:
+        inp = input("Text(t), setPlayers(s), quit(q), collect data(c)?: ")
+        if inp == "t":
+            text_game_loop2()
+        elif inp == "s":
+            setPlayers()
+        elif inp == "c":
+            collect_data()
+        elif inp == "q":
+            break
     text_game_loop2()
+    
 
-
+# Function to set players
 def setPlayers():
     player1choice = input("Plese enter player one choice (m for minimax, p for player, r for random): ")
     player2choice = input("Plese enter player two choice (m for minimax, p for player, r for random): ")
@@ -37,7 +53,7 @@ def setPlayers():
     players.append(player1choice)
     players.append(player2choice)
 
-
+# general purpose function to test stuff out
 def text_game_loop2():
     players = ["m", "r"]
     minimax_wins = 0
@@ -75,7 +91,65 @@ def text_game_loop2():
             print(f'Player 1 win')
             random_wins += 1
     
+# method used to train deep Q 
+# (DON'T GRADE US ON THIS, THIS IS THE CONTINUATION OF PROJECT)
+def train_deepQ():
+    players = ["d", "m"]
+    minimax_wins = 0
+    deep_q_wins = 0
+    for i in range(1000):
 
+
+        board = Connect4(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
+        heur1 = CountingInARow(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
+        #board.print_board()
+        player = 0
+
+        while not board.is_there_a_winner():
+            
+                    
+            if players[player] == "d":
+                state = board.board.flatten()
+                current_action = ql.get_action(state)
+                current_action += 1
+                col = current_action
+                board.place_piece(col, player)
+                reward = 0
+
+                if board.is_open(col):
+                    time.sleep(0.2)
+                    board.place_piece(col, player)
+                    reward = board.evaluate(player, heur1)
+                else:
+                    reward = -100
+                    val, pos = minimax.get_move(board.board, 3, player, heur1)
+                    board.place_piece(pos, player)
+                player = (player + 1) % 2
+                
+
+                # Train the model
+
+                ql.update(state=state, reward=reward)
+                ql.train_model()
+                
+            elif players[player] == "m":
+                val, pos = minimax.get_move(board, 6, player, heur1)
+                board.place_piece(pos, player)
+            
+            player = (player + 1) % 2
+            
+        if board.is_there_a_winner():
+            if board.check_winner(0):
+                print(f'Player 0 win')
+                deep_q_wins += 1
+            else:
+                print(f'Player 1 win')
+                minimax_wins += 1
+
+    print(f'Deep q wins: {deep_q_wins}')  
+    print(f'Minimax wins: {minimax_wins}')
+    
+# Random player move
 def get_random_move(player, board):
     time.sleep(1)
     col = random.randint(1, 7)
@@ -83,14 +157,14 @@ def get_random_move(player, board):
         col = random.randint(1, 7)
     return int(col)
 
-
+# Player move
 def get_player_move(player, board):
     inp = int(input("\nPlayer " + str(player % 2) + ", Drop a piece (1-7): "))
     while inp not in valid_inputs:
         inp = int(input("\nPlayer " + str(player%2) + ", Drop a piece (1-7): "))
     board.place_piece(inp, player)
 
-
+# Method used to collect data in different ways
 def collect_data():
     for i in range(10):
         board = Connect4(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)

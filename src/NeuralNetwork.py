@@ -3,6 +3,12 @@ from random import random, randint
 import numpy as np
 from functools import reduce
 
+
+########################################################
+# Taken from lab 7
+########################################################
+
+
 class NeuralNetwork():
     """
     Implementation of a Neural Network with variable number of layers

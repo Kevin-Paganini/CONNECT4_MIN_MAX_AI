@@ -35,16 +35,15 @@ def load_weights():
     np_load_old = np.load
     # modify the default parameters of np.load
     np.load = lambda *a, **k: np_load_old(*a, allow_pickle=True, **k)
-
     weights = 'size100_[42, 20, 7]_pop100_ep500_mut0.001_el5_fit0.57'
-    
-    
     with open(weights, 'rb') as f:
         ret = np.load(f)
     # restore np.load for future normal usage
     np.load = np_load_old
     return ret
 
+
+# Pygame loop
 def p_loop(clock, py_board, heur1, NN):
     players = ["Human", "Human"]
     button = 0
@@ -135,19 +134,16 @@ def p_loop(clock, py_board, heur1, NN):
                 # place piece in board
                 py_board.display_info("Neural Network " + str(player+1) + " is thinking...")
 
-                # Q learn
+                
 
-                state = py_board.get_board().board.flatten()
-                current_action = ql.get_action(py_board.get_board().board.flatten())
-                current_action += 1
-                col = current_action
-                # f_board = py_board.get_board()
-                # f_board = f_board.board.flatten()
-                # out = NN.step(f_board)
-                # col = np.argmax(out) + 1
-                #print("\nWhat NN picks: " + str(col))
-                #print("What Minimax picks: " + str(pos))
-                reward = 0
+                
+                f_board = py_board.get_board()
+                f_board = f_board.board.flatten()
+                out = NN.step(f_board)
+                col = np.argmax(out) + 1
+                print("\nWhat NN picks: " + str(col))
+                
+                
 
                 if py_board.is_open(col):
                     time.sleep(0.2)
@@ -160,10 +156,7 @@ def p_loop(clock, py_board, heur1, NN):
                 player = (player + 1) % 2
                 move_count += 1
 
-                # Train the model
-
-                ql.update(state=state, reward=reward)
-                ql.train_model()
+                
 
                 
 
@@ -179,6 +172,8 @@ def p_loop(clock, py_board, heur1, NN):
         if not winner and py_board.is_winner(players):
             winner = True
 
+
+# Waiting for user input
 def listen(py_board):
     mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
@@ -194,5 +189,7 @@ def listen(py_board):
     py_board.update_mouse_pos(mouse)
     return 0
 
+
+#main
 if __name__ == '__main__':
     main()
