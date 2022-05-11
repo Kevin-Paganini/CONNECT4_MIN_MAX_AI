@@ -67,7 +67,8 @@ class NeuralNetwork():
 
     def sigmoid(self, x):
         """This is the sigmoid activation function."""
-        return 1.0 / (1.0 + np.exp(-1.0 * x))
+        #return 1.0 / (1.0 + np.exp(-1.0 * x))
+        return 1/(1+np.exp(-100*x))
 
     def g(self,h):
         """

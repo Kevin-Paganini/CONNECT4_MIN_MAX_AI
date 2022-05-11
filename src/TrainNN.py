@@ -8,12 +8,12 @@ from NeuralNetwork import NNProblem
 
 
 def test_GA(x, y, verbose = True):  #[[outputs]]
-    size = 500
-    layers = [42, 20, 7]
+    size = 200
+    layers = [42, 69, 25, 7]
     pop_size = 100   # 200
     num_epochs = 250  # 200
     mut_rate = 0.001
-    elites = 10
+    elites = 1
     problem = NNProblem(x, y, layers)
     f_name = f'size{size}_{layers}_pop{pop_size}_ep{num_epochs}_mut{mut_rate}_el{elites}'
     print("\nParams: ")

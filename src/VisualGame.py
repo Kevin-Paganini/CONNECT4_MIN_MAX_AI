@@ -29,17 +29,12 @@ def main():
 def load_weights():
     np_load_old = np.load
     # modify the default parameters of np.load
-    np.load = lambda *a,**k: np_load_old(*a, allow_pickle=True, **k)
+    np.load = lambda *a, **k: np_load_old(*a, allow_pickle=True, **k)
 
-    
-    weights = 'size100_[42, 20, 7]_pop100_ep500_mut0.05_el5_fit0.54'
-    #weights = 'best_weights_2_Aaron_Version_25_0.05_200_1.npy'
     weights = 'size100_[42, 20, 7]_pop100_ep500_mut0.001_el5_fit0.57'
-    #weights = 'best_weights_2_Aaron_Version_0.npy'
     
     with open(weights, 'rb') as f:
         ret = np.load(f)
-    #print(ret)
     # restore np.load for future normal usage
     np.load = np_load_old
     return ret
@@ -99,9 +94,10 @@ def p_loop(clock, py_board, heur1, NN):
                 if py_board.place_piece(button, player):
                     player = (player+1) % 2
                     move_count += 1
+                    py_board.display_info("It's your turn player " + str(player+1) + ". Place your piece!")
 
             elif button == 9 and not winner: # random
-                py_board.display_info("Random player is thinking...")  # for some reason this isn't displaying?
+                py_board.display_info("Random player " + str(player+1) + " is thinking...")
                 time.sleep(0.2)
                 col = random.randint(1, 7)
                 while not py_board.is_open(col):
@@ -109,15 +105,19 @@ def p_loop(clock, py_board, heur1, NN):
                 py_board.place_piece(col, player)
                 player = (player + 1) % 2
                 move_count += 1
+                py_board.display_info("It's your turn player " + str(player) + ". Place your piece!")
 
             elif button == 10 and not winner: # minimax
                 py_board.display_info("Minimax " + str(player+1) + " is thinking...")
-                depth = 2
+
+                #depth = 2 this is for NN vs minimax
                 val, pos = minimax.get_move(py_board.get_board(), depth, player, heur1)
                 time.sleep(0.2)
                 py_board.place_piece(pos, player)
                 player = (player + 1) % 2
                 move_count += 1
+
+                py_board.display_info("It's your turn player " + str(player+1) + ". Place your piece!")
 
             elif button == 30 and not winner: # neural
                 # Before game load load in weights
@@ -138,11 +138,13 @@ def p_loop(clock, py_board, heur1, NN):
                     time.sleep(0.2)
                     py_board.place_piece(col, player)
                 else:
-                    print("NN picked full col, using minimax")
+                    #print("NN picked full col, using minimax")
                     val, pos = minimax.get_move(py_board.get_board(), depth, player, heur1)
                     py_board.place_piece(pos, player)
                 player = (player + 1) % 2
                 move_count += 1
+
+                py_board.display_info("It's your turn player " + str(player+1) + ". Place your piece!")
 
             elif button == 13:     # reset board
                 py_board.clear_stuff(players)

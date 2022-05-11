@@ -13,8 +13,8 @@ GREEN = (0, 200, 0)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 YELLOW = (100, 100, 100)
-PLAYER_0_COLOR = (51, 162, 29)
-PLAYER_1_COLOR = (200, 34, 27)
+PLAYER_1_COLOR = (200, 200, 29)
+PLAYER_0_COLOR = (200, 34, 27)
 EMPTY = (28, 26, 26)
 
 PLAYER_B_X_BUFF = 20
@@ -123,7 +123,6 @@ class Pyboard:
                 pygame.draw.circle(self.win, PLAYER_0_COLOR, (self.buff + (col - 1) * self.square_size + self.square_size / 2, row * self.square_size + self.square_size / 2), self.square_size / 3)
             else:
                 pygame.draw.circle(self.win, PLAYER_1_COLOR, (self.buff + (col - 1) * self.square_size + self.square_size / 2, row * self.square_size + self.square_size / 2), self.square_size / 3)
-            self.display_info("It's your turn player " + str((player+1)%2 + 1) + ". Place your piece!")
             return True
         return False
 
@@ -171,7 +170,7 @@ class Pyboard:
         col = self.get_row_col_from_mouse(mouse)
         if self.curr_col != col and 0 < col < 8 and self.board.is_open(col):
             self.clear_col_highlight()
-            pygame.draw.circle(self.win, (255,255,0), (self.buff + (col-1) * self.square_size + self.square_size/2, self.square_size/2), self.square_size/3)
+            pygame.draw.circle(self.win, (0,255,0), (self.buff + (col-1) * self.square_size + self.square_size/2, self.square_size/2), self.square_size/3)
             pygame.draw.circle(self.win, EMPTY, (self.buff + (col-1) * self.square_size + self.square_size / 2, self.square_size / 2),self.square_size / 3.5)
             self.curr_col = col
 
