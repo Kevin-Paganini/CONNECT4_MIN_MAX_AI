@@ -122,20 +122,11 @@ def p_loop(clock, py_board, heur1, NN):
                 py_board.display_info("It's your turn player " + str(player+1) + ". Place your piece!")
 
             elif button == 30 and not winner: # neural
-                # Before game load load in weights
-                # flatten board with numpy
-                # pass in to nn
-                #      Call .step from NNClass
-                # take highest output
-                # take target  
-                # place piece in board
                 py_board.display_info("Neural Network " + str(player+1) + " is thinking...")
                 f_board = py_board.get_board()
                 f_board = f_board.board.flatten()
                 out = NN.step(f_board)
                 col = np.argmax(out) + 1
-                #print("\nWhat NN picks: " + str(col))
-                #print("What Minimax picks: " + str(pos))
                 if py_board.is_open(col):
                     time.sleep(0.2)
                     py_board.place_piece(col, player)
