@@ -10,7 +10,10 @@ from Pyboard import Pyboard
 from Connect4 import Connect4
 from CountingInARow import CountingInARow
 from NeuralNetwork import NeuralNetwork
+from deepQ import DeepQLearning
 
+BATCH_SIZE = 16
+ql = DeepQLearning(states=42, actions=7, alpha=0.01, epsilon=.95, y=.95, batch_size=BATCH_SIZE, replay_mem_max=200, threshold=-5)
 
 def main():
     pygame.init()
@@ -25,6 +28,7 @@ def main():
     print(x)
     NN = NeuralNetwork([42, 20, 7], x)
     p_loop(clock, py_board, heur1, NN)
+
 
 
 def load_weights():
@@ -130,21 +134,38 @@ def p_loop(clock, py_board, heur1, NN):
                 # take target  
                 # place piece in board
                 py_board.display_info("Neural Network " + str(player+1) + " is thinking...")
-                f_board = py_board.get_board()
-                f_board = f_board.board.flatten()
-                out = NN.step(f_board)
-                col = np.argmax(out) + 1
+
+                # Q learn
+
+                state = py_board.get_board().board.flatten()
+                current_action = ql.get_action(py_board.get_board().board.flatten())
+                current_action += 1
+                col = current_action
+                # f_board = py_board.get_board()
+                # f_board = f_board.board.flatten()
+                # out = NN.step(f_board)
+                # col = np.argmax(out) + 1
                 #print("\nWhat NN picks: " + str(col))
                 #print("What Minimax picks: " + str(pos))
+                reward = 0
+
                 if py_board.is_open(col):
                     time.sleep(0.2)
                     py_board.place_piece(col, player)
+                    reward = py_board.get_board().evaluate(player, heur1)
                 else:
-                    #print("NN picked full col, using minimax")
+                    reward = -100
                     val, pos = minimax.get_move(py_board.get_board(), depth, player, heur1)
                     py_board.place_piece(pos, player)
                 player = (player + 1) % 2
                 move_count += 1
+
+                # Train the model
+
+                ql.update(state=state, reward=reward)
+                ql.train_model()
+
+                
 
                 py_board.display_info("It's your turn player " + str(player+1) + ". Place your piece!")
 
