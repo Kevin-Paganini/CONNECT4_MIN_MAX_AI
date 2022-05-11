@@ -7,7 +7,7 @@ DEBUG = False
 
 def parse_data():
     games = read_data_in()
-    with open("boards_and_targets.txt", "w") as w:
+    with open("boards_and_targets_min_max_6.txt", "w") as w:
         for game in games:
             connect_4 = Connect4(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
             moves = game.split(", ")
@@ -40,7 +40,7 @@ def parse_data():
 
 
 def read_data_in():
-    with open("data.txt") as r:
+    with open("data_min_max6_v_min_max6.txt") as r:
         to_parse = r.read()
         games = to_parse.split("\n")
         i = 0

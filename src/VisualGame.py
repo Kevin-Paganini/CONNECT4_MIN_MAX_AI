@@ -22,6 +22,7 @@ def main():
     pygame.display.update()
     # Load in weights   
     x = load_weights()
+    print(x)
     NN = NeuralNetwork([42, 20, 7], x)
     p_loop(clock, py_board, heur1, NN)
 
@@ -32,6 +33,7 @@ def load_weights():
     np.load = lambda *a, **k: np_load_old(*a, allow_pickle=True, **k)
 
     weights = 'size100_[42, 20, 7]_pop100_ep500_mut0.001_el5_fit0.57'
+    
     
     with open(weights, 'rb') as f:
         ret = np.load(f)

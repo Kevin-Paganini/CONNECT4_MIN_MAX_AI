@@ -38,7 +38,6 @@ def train(problem, initial, mut_rate, epochs = 10, elites = 2, verbose = True):
     population = initial
     total_time = 0
     t_count = 0
-
     if verbose:
         print("\nStarting GA\n")
     for i in range(epochs):
@@ -52,9 +51,9 @@ def train(problem, initial, mut_rate, epochs = 10, elites = 2, verbose = True):
         new_population = [pairs[i][0] for i in range(elites)]
 
         while len(new_population) < len(population):
-            parent = problem.selection(population, weights, 2)
+            parent = problem.selection(population, weights, 10)
             child1 = problem.crossover(parent[0], parent[1])
-            child1 = problem.mutate(child1, mut_rate, 0, 10)
+            child1 = problem.mutate(state=child1, rate=mut_rate, mu=0, s=25)
             new_population.append(child1)
         population = new_population
         best = problem.found_solution(population)

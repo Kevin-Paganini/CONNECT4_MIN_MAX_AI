@@ -17,16 +17,17 @@ players = ["m", "r"]
 
 
 def main():
-    while True:
-        inp = input("Text(t), setPlayers(s), quit(q), collect data(c)?: ")
-        if inp == "t":
-            text_game_loop2()
-        elif inp == "s":
-            setPlayers()
-        elif inp == "c":
-            collect_data()
-        elif inp == "q":
-            break
+    # while True:
+    #     inp = input("Text(t), setPlayers(s), quit(q), collect data(c)?: ")
+    #     if inp == "t":
+    #         text_game_loop2()
+    #     elif inp == "s":
+    #         setPlayers()
+    #     elif inp == "c":
+    #         collect_data()
+    #     elif inp == "q":
+    #         break
+    text_game_loop2()
 
 
 def setPlayers():
@@ -38,30 +39,43 @@ def setPlayers():
 
 
 def text_game_loop2():
-    board = Connect4(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
-    heur1 = CountingInARow(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
-    board.print_board()
-    player = 0
+    players = ["m", "r"]
+    minimax_wins = 0
+    random_wins = 0
+    for i in range(1000):
 
-    while not board.is_there_a_winner():
-        print(f'Player: {player}')
-        if players[player] == "p":
-            get_player_move(player, board)
+        board = Connect4(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
+        heur1 = CountingInARow(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
+        #board.print_board()
+        player = 0
+
+        while not board.is_there_a_winner():
+            #print(f'Player: {player}')
+            if players[player] == "p":
+                get_player_move(player, board)
+                    
+            elif players[player] == "r":
+                col = get_random_move(player, board)
+                board.place_piece(col, player)
                 
-        elif players[player] == "r":
-            col = get_random_move(player, board)
-            board.place_piece(col, player)
+            elif players[player] == "m":
+                val, pos = minimax.get_move(board, 1, player, heur1)
+                board.place_piece(pos, player)
             
-        elif players[player] == "m":
-            val, pos = minimax.get_move(board, 5, player, heur1)
-            board.place_piece(pos, player)
-        
-        player = (player + 1) % 2
-        board.print_board()
-        p1 = board.evaluate(0, heur1)
-        p2 = board.evaluate(1, heur1)
-        print("V p1: " + str(p1) + "\nV p2: " + str(p2))
-
+            player = (player + 1) % 2
+            #board.print_board()
+            #p1 = board.evaluate(0, heur1)
+            #p2 = board.evaluate(1, heur1)
+            #print("V p1: " + str(p1) + "\nV p2: " + str(p2))
+        if board.is_there_a_winner():
+            if board.check_winner(0):
+                print(f'Game num {i}: Minimax win')
+                minimax_wins += 1
+            else:
+                print(f'Game num {i}: Random win')
+                random_wins += 1
+    print(f"MINIMAX wins: {minimax_wins}")
+    print(f'RANDOM wins: {random_wins}')
 
 def get_random_move(player, board):
     time.sleep(1)
@@ -79,7 +93,7 @@ def get_player_move(player, board):
 
 
 def collect_data():
-    for i in range(1000):
+    for i in range(10):
         board = Connect4(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
         heur1 = CountingInARow(BOARD_WIDTH, BOARD_HEIGHT, IN_A_ROW)
         board.print_board()
@@ -87,7 +101,8 @@ def collect_data():
         count = 0
         run = True
         rate = 0.4
-        with open("data.txt", "a") as f:
+        players = ["m", "m"]
+        with open("data_min_max6_v_min_max6.txt", "a") as f:
             while run:
                 
 
