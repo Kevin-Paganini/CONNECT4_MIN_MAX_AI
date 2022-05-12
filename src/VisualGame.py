@@ -11,7 +11,6 @@ from Connect4 import Connect4
 from CountingInARow import CountingInARow
 from NeuralNetwork import NeuralNetwork
 
-
 def main():
     pygame.init()
     pygame.display.set_caption("Connect Four++")
@@ -22,25 +21,25 @@ def main():
     pygame.display.update()
     # Load in weights   
     x = load_weights()
-    print(x)
+    #print(x)
     NN = NeuralNetwork([42, 20, 7], x)
     p_loop(clock, py_board, heur1, NN)
+
 
 
 def load_weights():
     np_load_old = np.load
     # modify the default parameters of np.load
     np.load = lambda *a, **k: np_load_old(*a, allow_pickle=True, **k)
-
     weights = 'size100_[42, 20, 7]_pop100_ep500_mut0.001_el5_fit0.57'
-    
-    
     with open(weights, 'rb') as f:
         ret = np.load(f)
     # restore np.load for future normal usage
     np.load = np_load_old
     return ret
 
+
+# Pygame loop
 def p_loop(clock, py_board, heur1, NN):
     players = ["Human", "Human"]
     button = 0
@@ -112,13 +111,12 @@ def p_loop(clock, py_board, heur1, NN):
             elif button == 10 and not winner: # minimax
                 py_board.display_info("Minimax " + str(player+1) + " is thinking...")
 
-                #depth = 2 this is for NN vs minimax
+                # depth = 2 this is for NN vs minimax demo
                 val, pos = minimax.get_move(py_board.get_board(), depth, player, heur1)
                 time.sleep(0.2)
                 py_board.place_piece(pos, player)
                 player = (player + 1) % 2
                 move_count += 1
-
                 py_board.display_info("It's your turn player " + str(player+1) + ". Place your piece!")
 
             elif button == 30 and not winner: # neural
@@ -131,12 +129,10 @@ def p_loop(clock, py_board, heur1, NN):
                     time.sleep(0.2)
                     py_board.place_piece(col, player)
                 else:
-                    #print("NN picked full col, using minimax")
                     val, pos = minimax.get_move(py_board.get_board(), depth, player, heur1)
                     py_board.place_piece(pos, player)
                 player = (player + 1) % 2
                 move_count += 1
-
                 py_board.display_info("It's your turn player " + str(player+1) + ". Place your piece!")
 
             elif button == 13:     # reset board
@@ -149,6 +145,8 @@ def p_loop(clock, py_board, heur1, NN):
         if not winner and py_board.is_winner(players):
             winner = True
 
+
+# Waiting for user input
 def listen(py_board):
     mouse = pygame.mouse.get_pos()
     for event in pygame.event.get():
@@ -164,5 +162,7 @@ def listen(py_board):
     py_board.update_mouse_pos(mouse)
     return 0
 
+
+#main
 if __name__ == '__main__':
     main()

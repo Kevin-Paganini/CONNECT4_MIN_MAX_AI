@@ -1,10 +1,18 @@
+
+
+################################################
+# Custom implementation of mini-max from Aaron and Kevin
+################################################
+
+
+# Starts the search algorithm and returns a move
 def get_move(board, limit, player, heur):
     alpha = -9223372036854775800
     beta = 9223372036854775800
     val, act = max_value(board, 0, player, limit, alpha, beta, heur)
     return val, act
 
-
+# Finds maximal board
 def max_value(board, d, player, limit, alpha, beta, heur):
     if d == limit or board.is_there_a_winner():
         if d == 0:
@@ -28,6 +36,7 @@ def max_value(board, d, player, limit, alpha, beta, heur):
     return [v, act]
 
 
+# Finds minimal board
 def min_value(board, d, player, limit, alpha, beta, heur):
     if d == limit or board.is_there_a_winner():
         if d == 0:

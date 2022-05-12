@@ -5,8 +5,9 @@ import numpy as np
 from NeuralNetwork import NNProblem
 
 
+# Trains neural network
 
-
+# Trains the neural network
 def test_GA(x, y, verbose = True):  #[[outputs]]
     size = 200
     layers = [42, 69, 25, 7]
@@ -34,6 +35,8 @@ def test_GA(x, y, verbose = True):  #[[outputs]]
     print("GA run " + str(num_restarts) + " times.")
     print("Number of successes: " + str(solve_rate))
 
+
+# Actual training of the neural network
 def train(problem, initial, mut_rate, epochs = 10, elites = 2, verbose = True):
     population = initial
     total_time = 0
@@ -72,7 +75,7 @@ def train(problem, initial, mut_rate, epochs = 10, elites = 2, verbose = True):
     weights = [problem.evaluate(i) for i in population]
     return population[np.argmax(weights)]
 
-
+# Checks to see the best neural network
 def examine_best(problem, best, f_name):
     score = problem.evaluate(best)
     score = round(score, 5)
@@ -90,6 +93,7 @@ def examine_best(problem, best, f_name):
     for w in best._W:
         print(w)
 
+# Loads inputs and target values
 def load_boards_targets_txt(filepath):
     """
         Loads the .csv file and parses each lines.
@@ -112,6 +116,8 @@ def load_boards_targets_txt(filepath):
     y = np.array(y)
     return x, y
 
+
+# Calculates accuracy score
 def accuracy(x, y, nn):
     thres = 0.1
 
@@ -121,15 +127,13 @@ def accuracy(x, y, nn):
     matches = [1 for i in range(len(y)) if abs(y[i] - out[i]) < thres]
     return len(matches) / np.shape(y)[0]
 
-
+# Method called by main to start process
 def train_connect4_network():
     x, y = load_boards_targets_txt("boards_and_targets.txt")
     test_GA(x[:100], y[:100], True)
 
-def main():
-    
-    train_connect4_network()
+
 
 if __name__ == '__main__':
     
-    main()
+    train_connect4_network()

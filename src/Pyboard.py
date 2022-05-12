@@ -28,6 +28,9 @@ poss_players = ["Human", "Minimax", "Neural", "Random"]
 FONT = 'freesansbold.ttf'
 #FONT = "C:\Windows\Fonts\Arial.ttf"
 
+###################################################
+# Handles all of GUI elements
+###################################################
 
 class Pyboard:
 
@@ -46,6 +49,7 @@ class Pyboard:
 
         self.create_board()
 
+    # Creates the board
     def create_board(self):
         self.win.fill(BLUE)
         pygame.draw.rect(self.win, YELLOW, pygame.Rect((0, 0), (self.buff, HEIGHT)))
@@ -63,6 +67,7 @@ class Pyboard:
         self.set_up_buttons(self.players)
         self.display_info("Hit start to start the game, or pick the players!")
 
+    # Sets up the buttons
     def set_up_buttons(self, players):   #pygame.Rect((left, top), (width, height)
         self.refresh_midline_buttons([GREEN, RED])
         self.refresh_side_buttons(players)
@@ -113,9 +118,11 @@ class Pyboard:
         #print(str(string) + ": " + str(color_rect.left - 10) + " < x < " + str(color_rect.right + 10) + " and " + str(color_rect.top - 5) + " < y < " + str(color_rect.bottom + 5) + ":")
         return color_rect.right
 
+    # Checks if board is open
     def is_open(self, col):
         return self.board.is_open(col)
 
+    # Places piece to board
     def place_piece(self, col, player):
         if self.board.is_open(col):
             row = self.board.place_piece(col, player)
@@ -126,6 +133,8 @@ class Pyboard:
             return True
         return False
 
+    # Gets row and col from mouse
+    # Really only need col 
     def get_row_col_from_mouse(self, mouse):
         col = (mouse[0] - (self.square_size/2) + 15) // self.square_size + 1
         if col > 7 or col < 1:
@@ -133,6 +142,7 @@ class Pyboard:
         else:
             return int(col)
 
+    # Gets what button wqas clicked from mouse
     def get_button_from_mouse(self, mouse):
         x = mouse[0]
         y = mouse[1]
@@ -161,11 +171,12 @@ class Pyboard:
             return 20  # random p2
         return 0
 
-
+    # Updates mouse position and highlights column
     def update_mouse_pos(self, mouse):
         self.display_mouse(mouse)
         self.show_col_highlight(mouse)
 
+    # Highlights sepcific column
     def show_col_highlight(self, mouse):
         col = self.get_row_col_from_mouse(mouse)
         if self.curr_col != col and 0 < col < 8 and self.board.is_open(col):
@@ -174,11 +185,13 @@ class Pyboard:
             pygame.draw.circle(self.win, EMPTY, (self.buff + (col-1) * self.square_size + self.square_size / 2, self.square_size / 2),self.square_size / 3.5)
             self.curr_col = col
 
+    # Clears column highlight
     def clear_col_highlight(self):
         for x in range(self.cols):
             if self.board.is_open(x+1):
                 pygame.draw.circle(self.win, EMPTY,(self.buff + x * self.square_size + self.square_size / 2, self.square_size / 2), self.square_size / 3)
 
+    # Displays where mouse is
     def display_mouse(self, mouse):
         inf = str(mouse[0]) + ", " + str(mouse[1])
         font = pygame.font.Font(FONT, 20)
@@ -189,6 +202,7 @@ class Pyboard:
         pygame.draw.rect(self.win, YELLOW, back)
         self.win.blit(text, text_rect)
 
+    # Checks board and sees if there is a winner
     def is_winner(self, players):
         if self.board.check_winner(0):
             self.display_info("Player 1 (" + players[0] + ") is the winner!")
@@ -202,6 +216,7 @@ class Pyboard:
         else:
             return False
 
+    # Display info for board
     def display_info(self, info):
         font = pygame.font.Font(FONT, 20)
         text = font.render(info, True, BLACK, YELLOW)
@@ -211,13 +226,16 @@ class Pyboard:
         self.win.blit(text, text_rect)
         pygame.display.update()
 
+    # Clears board
     def clear_stuff(self, players):
         self.board.clear_board()
         self.create_board()
         self.refresh_side_buttons(players)
 
+    # Gets connect 4 board
     def get_board(self):
         return self.board
 
+    # Updates players being used
     def upd_players(self, p):
         self.players = p
