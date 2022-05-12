@@ -2,7 +2,7 @@ import numpy as np
 
 import tensorflow as tf
 
-from tensorflow.python.keras.layers import Dense, Activation, Input
+from tensorflow.keras.layers import Dense, Activation, Input
 
 ############################################################
 # This is from Luke's team

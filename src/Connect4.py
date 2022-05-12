@@ -96,7 +96,7 @@ class Connect4():
 
     #Checks if the board is full
     def is_full(self):
-        for i in range(1, 7):
+        for i in range(1, 8):
             if self.is_open(i):
                 return False
         return True

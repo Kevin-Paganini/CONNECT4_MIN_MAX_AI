@@ -10,11 +10,6 @@ import random
 import time
 import minimax
 from CountingInARow import CountingInARow
-from deepQ import DeepQLearning
-
-
-
-
 
 WIDTH = 1050
 HEIGHT = 800
@@ -26,8 +21,6 @@ IN_A_ROW = 4
 
 valid_inputs = [1, 2, 3, 4, 5, 6, 7]
 players = ["m", "r"]
-BATCH_SIZE = 16
-ql = DeepQLearning(states=42, actions=7, alpha=0.01, epsilon=.95, y=.95, batch_size=BATCH_SIZE, replay_mem_max=200, threshold=-5)
 
 
 
@@ -92,7 +85,12 @@ def text_game_loop2():
             random_wins += 1
     
 # method used to train deep Q 
-# (DON'T GRADE US ON THIS, THIS IS THE CONTINUATION OF PROJECT)
+# FIXME (DON'T GRADE US ON THIS, THIS IS THE CONTINUATION OF PROJECT)
+
+# from deepQ import DeepQLearning
+# BATCH_SIZE = 16
+# ql = DeepQLearning(states=42, actions=7, alpha=0.01, epsilon=.95, y=.95, batch_size=BATCH_SIZE, replay_mem_max=200, threshold=-5)
+    """
 def train_deepQ():
     players = ["d", "m"]
     minimax_wins = 0
@@ -125,13 +123,13 @@ def train_deepQ():
                     val, pos = minimax.get_move(board.board, 3, player, heur1)
                     board.place_piece(pos, player)
                 player = (player + 1) % 2
-                
+
 
                 # Train the model
 
                 ql.update(state=state, reward=reward)
                 ql.train_model()
-                
+
             elif players[player] == "m":
                 val, pos = minimax.get_move(board, 6, player, heur1)
                 board.place_piece(pos, player)
@@ -148,6 +146,7 @@ def train_deepQ():
 
     print(f'Deep q wins: {deep_q_wins}')  
     print(f'Minimax wins: {minimax_wins}')
+    """
     
 # Random player move
 def get_random_move(player, board):

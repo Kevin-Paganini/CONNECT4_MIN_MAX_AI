@@ -89,13 +89,13 @@ class Pyboard:
         self.p1_color[idx1] = GREEN
         self.p2_color[idx2] = GREEN
 
-        c_r_right = self.init_side_button2(PLAYER_B_X_BUFF, "Player 1", BLACK, PLAYER1_B_Y)
+        c_r_right = self.init_side_button2(PLAYER_B_X_BUFF, "Player 1", PLAYER_0_COLOR, PLAYER1_B_Y)
         c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Human", self.p1_color[0], PLAYER1_B_Y)
         c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Minimax", self.p1_color[1], PLAYER1_B_Y)
         c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Neural", self.p1_color[2], PLAYER1_B_Y)
         self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Random", self.p1_color[3], PLAYER1_B_Y)
 
-        c_r_right = self.init_side_button2(PLAYER_B_X_BUFF, "Player 2", BLACK, PLAYER2_B_Y)
+        c_r_right = self.init_side_button2(PLAYER_B_X_BUFF, "Player 2", PLAYER_1_COLOR, PLAYER2_B_Y)
         c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Human", self.p2_color[0],PLAYER2_B_Y)
         c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Minimax", self.p2_color[1], PLAYER2_B_Y)
         c_r_right = self.init_side_button2(P_B_SPACING + c_r_right + P_B_PADDING, "Neural", self.p2_color[2],PLAYER2_B_Y)

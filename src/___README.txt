@@ -1,4 +1,4 @@
-Connect 4 Game
+Connect 4 Game by Aaron C and Keivn P
 
 To run the GUI game (main program):
 In the command prompt, navigate to the unzipped Connect 4 folder, and type: python VisualGame.py
@@ -9,9 +9,6 @@ neither of us installed it intentionally, nor did we install anything other than
 
 To fix: on line 29 of Pyboard.py, there is a commented out default windows font path.
 Uncommenting this will use the default font on the machine
-
-To run the text game:
-In the command prompt, navigate to the unzipped Connect 4 folder, and type: python main.py
 
 Dependencies:
 random
